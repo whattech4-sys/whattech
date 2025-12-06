@@ -284,18 +284,25 @@ const addToCartBtn = document.getElementById("addToCartBtn");
 
 
 
-// OPEN popup when card or button is clicked
-document.querySelectorAll(".card").forEach(card => {
-  card.addEventListener("click", () => {
-    popupTitle.textContent = card.dataset.title;
-    popupText.textContent = card.dataset.desc;
-    popupPrice.textContent = card.dataset.price;
-    popupImg.src = card.dataset.img;
+
+// OPEN POPUP when any .view-btn is clicked
+document.querySelectorAll(".view-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+
+    popupTitle.textContent = btn.dataset.title;
+    popupText.textContent = btn.dataset.desc;
+    popupPrice.textContent = btn.dataset.price;
+    popupImg.src = btn.dataset.img;
+    popupImg.alt = btn.dataset.title;
 
     popup.style.display = "flex";
+    popup.setAttribute("aria-hidden", "false");
+
+    addToCartBtn.onclick = () =>
+      alert(btn.dataset.title + " added to cart (demo).");
+
   });
 });
-
 
 // CLOSE POPUP
 closePopupBtn.onclick = () => {
