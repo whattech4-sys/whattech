@@ -98,8 +98,7 @@
   <script src="https://cdn.jsdelivr.net/npm/three@0.134.0/examples/js/loaders/GLTFLoader.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.134.0/examples/js/controls/OrbitControls.js"></script>
 
-
-
+ 
 
 </head>
 
@@ -111,8 +110,6 @@
     <h1 class="logo"><span class="logo-blue">What</span>Tech</h1>
   </div>
   <p class="tag">Your Hub for Laptops & Tech Services</p>
-    <link rel="icon" type="image/png" href="Logo Whattech.png">
-
 </header>
 
 
@@ -127,7 +124,13 @@
 </section>
 
 
-       <!-- CARD 1 -->
+<!-- FEATURED PRODUCTS -->
+<section class="products" aria-label="Featured products">
+  <h2>Featured Products</h2>
+
+  <div class="product-grid">
+
+    <!-- CARD 1 -->
     <article class="card">
       <div class="image-cube">
       <img src="https://i.ibb.co/zWMGmBzB/HP-830-G7.jpg" alt="HP-830-G7" border="0"></a>
@@ -184,9 +187,40 @@
       </div>
     </article>
 
- </div>
+  </div>
 </section>
 
+
+<!-- FULL POPUP (copied from laptops2.html) -->
+<div id="popup" class="popup" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="popup-content" role="document">
+
+    <button id="closePopup" class="close" aria-label="Close popup">&times;</button>
+
+    <div style="display:flex;gap:20px;align-items:flex-start;">
+
+      <!-- Left image -->
+      <div style="flex:0 0 240px;">
+        <img id="popupImg" src="" alt="" class="popup-img"
+             style="width:100%;height:auto;border-radius:8px;">
+      </div>
+
+      <!-- Right details -->
+      <div style="flex:1;">
+        <h2 id="popupTitle" class="popup-title" style="margin-top:0;">Product Title</h2>
+
+        <p id="popupText" class="popup-text"
+           style="margin:8px 0 12px;opacity:0.95;"></p>
+
+        <p id="popupPrice" class="price"
+           style="font-size:20px;margin-bottom:14px;color:#ffd7d7;"></p>
+
+        <button class="btn-open" id="addToCartBtn">Add to Cart</button>
+
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <br><br><br><br><br>
@@ -208,7 +242,7 @@
   <div class="emailAndPhone">
     <p>Customer Services
       <a href="https://wa.me//+96181972001" target="_blank">
-<img src="https://i.ibb.co/k6vD6pyT/Screenshot-2-12-2025-225619-www-bing-com.jpg" alt="Screenshot-2-12-2025-225619-www-bing-com" border="0" width="30px" height="30px"></a>
+        <img src="https://i.ibb.co/k6vD6pyT/Screenshot-2-12-2025-225619-www-bing-com.jpg" alt="Screenshot-2-12-2025-225619-www-bing-com" border="0" width="30px" height="30px"></a>
       </a>
     </p>
   </div>
@@ -223,7 +257,7 @@
 
 </section>
 
-<hr />
+<hr/>
 
 <footer>
   <p>© <span id="year"></span> WhatTech</p>
@@ -246,8 +280,6 @@ const popupImg = document.getElementById("popupImg");
 const addToCartBtn = document.getElementById("addToCartBtn");
 
 
-
-
 // OPEN POPUP when any .view-btn is clicked
 document.querySelectorAll(".view-btn").forEach(btn => {
   btn.addEventListener("click", () => {
@@ -266,6 +298,7 @@ document.querySelectorAll(".view-btn").forEach(btn => {
 
   });
 });
+
 
 // CLOSE POPUP
 closePopupBtn.onclick = () => {
@@ -327,14 +360,9 @@ header{padding:28px 20px;text-align:left}
 
 .products{max-width:1100px;margin:36px auto;padding:0 20px}
 .product-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:18px}
-.card{background:var(--card);padding:16px;border-radius:12px;color:#fff;min-height:160px;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+.card{background:var(--card);padding:16px;border-radius:12px;color:#fff;min-height:160px;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between}
 .card-icon{font-size:34px}
 .card h3{margin:8px;}
-.card:hover{
-    background-color:red;
-    transform: scale(1.05);
-    transition: transform 0.3s ease;
-}
 
 .image-cube {
   width: 120px;
@@ -524,20 +552,4 @@ footer{
   background: rgba(255, 255, 255, 0.28);
 }
 </style>
-
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
