@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<script>
+(function(){
+    function isHex(h){ return /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test((h||'').trim()); }
+    function to6(h){ h = h.replace('#',''); if (h.length===3) h = h.split('').map(c=>c+c).join(''); return h; }
+    function shadeHex(hex, percent){
+        hex = to6(hex);
+        const num = parseInt(hex,16);
+        let r = (num >> 16) & 0xFF;
+        let g = (num >> 8) & 0xFF;
+        let b = num & 0xFF;
+        r = Math.round(r * (100 + percent) / 100);
+        g = Math.round(g * (100 + percent) / 100);
+        b = Math.round(b * (100 + percent) / 100);
+        r = Math.max(0, Math.min(255, r));
+        g = Math.max(0, Math.min(255, g));
+        b = Math.max(0, Math.min(255, b));
+        return '#' + ((1<<24) + (r<<16) + (g<<8) + b).toString(16).slice(1);
+    }
+
+    // Capture clicks on the theme button before the existing handler and replace behavior.
+    document.addEventListener('click', function(e){
+        const btn = e.target.closest && e.target.closest('.theme-toggle');
+        if (!btn) return;
+        // Prevent the original inline listener from running
+        e.stopImmediatePropagation();
+        e.preventDefault();
+
+        const color = prompt('Enter a color (name or hex, e.g. #0077ff):', '#0758ee');
+        if (!color) return;
+
+        const root = document.documentElement.style;
+        if (isHex(color)) {
+            // Set multiple CSS variables so the whole theme updates
+            root.setProperty('--accent', color);
+            root.setProperty('--dark-blue', shadeHex(color, -18)); // slightly darker
+            root.setProperty('--card', shadeHex(color, 8));        // slightly lighter
+        } else {
+            // For named colors, just apply the provided name to all vars
+            root.setProperty('--accent', color);
+            root.setProperty('--dark-blue', color);
+            root.setProperty('--card', color);
+        }
+    }, true);
+})();
+</script>
+<style>
+    .theme-toggle {
+        position: fixed;
+        top: 14px;
+        right: 14px;
+        background: linear-gradient(135deg, var(--accent), var(--dark-blue));
+        color: #fff;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        z-index: 50;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(7, 88, 238, 0.3);
+    }
+
+    .theme-toggle:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(7, 88, 238, 0.5);
+    }
+
+    .theme-toggle:active {
+        transform: translateY(0);
+    }
+
+    .light-mode .theme-toggle {
+        background: linear-gradient(135deg, #0077ff, #003566);
+    }
+</style>
+<button class="theme-toggle">Change Theme Color</button>
+<script>
+    const themeToggleBtn = document.querySelector('.theme-toggle');
+    themeToggleBtn.addEventListener('click', () => {
+        const color = prompt("Enter a color (name or hex code):", "#ffffff");
+        if (color) {
+            document.documentElement.style.setProperty('--dark-blue', color);
+        }
+    });
+</script>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Software Maintenance - WhatTech</title>
+  <link rel="stylesheet" href="style.css" />
+   <!-- 🔍 SEARCH BAR (Top Right Corner) -->
+<div class="search-wrapper">
+  <input 
+    id="searchInput"
+    type="text"
+    class="search-input"
+    placeholder="Search..."
+  />
+</div>
+</head>
+
+<body class="dark-mode">
+
+<header>
+  <h1 class="logo"><span class="logo-blue">What</span>Tech</h1>
+
+  <!-- BACK BUTTON -->
+  <button onclick="history.back()" class="back-btn">← Back</button>
+
+  <p class="tag">Software Maintenance Collection</p>
+
+ 
+
+
+<section class="products">
+  <h2>All Software Maintenances</h2>
+
+  <!-- Software Maintenance Cards Grid -->
+  <div class="product-grid" id="Software MaintenanceGrid">
+
+
+
+    <!-- CARD 1-->
+    <article class="card">
+      <div class="image-cube">
+       <img src="https://i.ibb.co/9kT0ytzp/Windows-11-photo.jpg" alt="Windows 11 photo" border="0" loading="lazy">
+      </div>
+      <h3>Windows 11 Activation</h3>
+      <p class="price">$19.99</p>
+      <div class="card-actions">
+        <button
+          class="btn view-btn"
+          data-title="Windows 11 Activation"
+          data-price="$19.99"
+          data-img="https://i.ibb.co/9kT0ytzp/Windows-11-photo.jpg" alt="Windows 11 photo" border="0" loading="lazy">
+        View</button>
+      </div>
+    </article>
+
+        <!-- CARD 2-->
+    <article class="card">
+      <div class="image-cube">
+       <img src="https://i.ibb.co/DPW7Zx9p/Microsoft-Office.jpg" alt="Microsoft Office" border="0" loading="lazy">
+      </div>
+      <h3>Microsoft Office</h3>
+      <p class="price">$9.99</p>
+      <div class="card-actions">
+        <button
+          class="btn view-btn"
+          data-title="Microsoft Office"
+          data-price="$9.99"
+          data-img="https://i.ibb.co/DPW7Zx9p/Microsoft-Office.jpg" alt="Microsoft Office" border="0" loading="lazy">
+        View</button>
+      </div>
+    </article>
+
+        <!-- CARD 3-->
+    <article class="card">
+      <div class="image-cube">
+       <img src="https://i.ibb.co/WvmdffXv/adobe-programs.jpg" alt="adobe programs" border="0" loading="lazy">
+      </div>
+      <h3>Adobe Applications</h3>
+      <p class="price">$29.99</p>
+      <div class="card-actions">
+        <button
+          class="btn view-btn"
+          data-title="Adobe Applications"
+          data-price="$29.99"
+          data-img="https://i.ibb.co/WvmdffXv/adobe-programs.jpg" alt="adobe programs" border="0" loading="lazy">
+        View</button>
+      </div>
+    </article>
+
+          <!-- CARD 4-->
+    <article class="card">
+      <div class="image-cube">
+       <img src="https://i.ibb.co/nN3tct81/Drivers.jpg" alt="Drivers" border="0" loading="lazy">
+      </div>
+      <h3>Updating + Installing Drivers</h3>
+      <p class="price">$9.99</p>
+      <div class="card-actions">
+        <button
+          class="btn view-btn"
+          data-title="Updating + Installing Drivers"
+          data-price="$9.99"
+          data-img="https://i.ibb.co/nN3tct81/Drivers.jpg" alt="Drivers" border="0" loading="lazy">
+        View</button>
+      </div>
+    </article>
+
+
+
+    <!-- You can duplicate a card block above to add more Software Maintenances -->
+
+
+  </div>
+</section>
+
+<!-- Popup Window (same theme as your home popup) -->
+<div id="popup" class="popup" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="popup-content" role="document">
+    <button id="closePopup" class="close" aria-label="Close popup">&times;</button>
+
+    <div style="display:flex;gap:20px;align-items:flex-start;">
+      <!-- Left: Image -->
+      <div style="flex:0 0 240px;">
+        <img id="popupImg" src="" alt="Product image" class="popup-img" style="width:100%;height:auto;border-radius:8px;">
+      </div>
+
+      <!-- Right: Details -->
+      <div style="flex:1;">
+        <h2 id="popupTitle" class="popup-title" style="margin-top:0;">Product Title</h2>
+        <p id="popupText" class="popup-text" style="margin:8px 0 12px;opacity:0.95;"></p>
+        <p id="popupPrice" class="price" style="font-size:20px;margin-bottom:14px;color:#ffd7d7;"></p>
+
+        <div style="display:flex;gap:12px;align-items:center;">
+          <button class="btn-open" id="addToCartBtn">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br><br>
+<footer>
+  <p>© <span id="year"></span> WhatTech</p>
+</footer>
+
+<script>
+  // year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Popup elements
+  const popup = document.getElementById('popup');
+  const closeBtn = document.getElementById('closePopup');
+  const titleEl = document.getElementById('popupTitle');
+  const textEl = document.getElementById('popupText');
+  const priceEl = document.getElementById('popupPrice');
+  const imgEl = document.getElementById('popupImg');
+  const addToCartBtn = document.getElementById('addToCartBtn');
+
+  // Open popup when any .view-btn is clicked, and populate content from data-* attributes
+  function openPopupFromButton(btn) {
+    const title = btn.dataset.title || 'Product';
+    const desc = btn.dataset.desc || '';
+    const price = btn.dataset.price || '';
+    const img = btn.dataset.img || '';
+
+    titleEl.textContent = title;
+    textEl.textContent = desc;
+    priceEl.textContent = price;
+
+    // Set image, if file missing the browser will show broken image icon — replace filename as needed
+    imgEl.src = img;
+    imgEl.alt = title;
+
+    // update buttons with dataset (for example product id if you add one)
+    addToCartBtn.onclick = () => {
+      // placeholder behavior — replace with real cart code later
+      alert(title + " added to cart (demo).");
+    };
+
+   
+
+    popup.style.display = 'flex';
+    popup.setAttribute('aria-hidden','false');
+  }
+
+  document.querySelectorAll('.view-btn').forEach(btn => {
+    btn.addEventListener('click', () => openPopupFromButton(btn));
+  });
+
+  // close handlers
+  closeBtn.addEventListener('click', () => {
+    popup.style.display = 'none';
+    popup.setAttribute('aria-hidden','true');
+  });
+
+  window.addEventListener('click', (e) => {
+    if (e.target === popup) {
+      popup.style.display = 'none';
+      popup.setAttribute('aria-hidden','true');
+    }
+  });
+
+  // keyboard: ESC to close
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && popup.style.display === 'flex') {
+      popup.style.display = 'none';
+      popup.setAttribute('aria-hidden','true');
+    }
+  });
+</script>
+<script>
+// --- SEARCH FUNCTION ---
+const searchInput = document.getElementById("searchInput");
+const cards = document.querySelectorAll(".card");
+
+searchInput.addEventListener("keyup", function () {
+    const query = searchInput.value.toLowerCase();
+
+    cards.forEach(card => {
+        const title = card.querySelector("h3").textContent.toLowerCase();
+        const desc = card.querySelector(".desc").textContent.toLowerCase();
+        const price = card.querySelector(".price").textContent.toLowerCase();
+
+        // Show or hide card depending on search
+        if (
+            title.includes(query) ||
+            desc.includes(query) ||
+            price.includes(query)
+        ) {
+            card.style.display = "flex";
+        } else {
+            card.style.display = "none";
+        }
+    });
+});
+
+</script>
+
+
+</body>
+<style>:root{
+  --dark-blue:#0758ee;
+  --accent:#0077ff;
+  --card:#0976eb;
+}
+
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter, Arial, sans-serif;transition:background 0.35s,color 0.35s}
+
+/* DARK MODE */
+.dark-mode{background:linear-gradient(180deg,#000000, var(--dark-blue));color:#fff}
+
+/* LIGHT MODE */
+.light-mode{background:#ffffff;color:#031017}
+
+/* Toggle */
+.mode-toggle{position:fixed;top:14px;right:14px;background:#003566;color:#fff;border:none;padding:8px 10px;border-radius:8px;cursor:pointer;z-index:50}
+.light-mode .mode-toggle{background:#222;color:#fff}
+
+header{padding:28px 20px;text-align:left}
+.logo-row{display:flex;align-items:center;justify-content:space-between;max-width:1100px;margin:0 auto}
+.logo{font-size:36px;margin:0}
+.logo-blue{color:var(--accent)}
+.admin-link{text-decoration:none;font-size:18px;margin-left:12px}
+.tag{max-width:1100px;margin:6px auto 0;padding:0 20px;opacity:0.9}
+
+.hero{display:flex;gap:20px;align-items:center;justify-content:center;max-width:1100px;margin:30px auto;padding:20px}
+.Software Maintenance-3d{width:480px;height:320px;border-radius:12px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.6);flex:0 0 480px}
+.hero-text{max-width:520px;text-align:left}
+
+.categories{text-align:center;margin-top:20px}
+.buttons{display:flex;gap:18px;justify-content:center;flex-wrap:wrap}
+.cat-btn{padding:14px 26px;border-radius:10px;background:#003566;color:#fff;text-decoration:none;font-weight:600}
+.light-mode .cat-btn{background:#e9eef5;color:#000}
+
+.products{max-width:1100px;margin:36px auto;padding:0 20px}
+.product-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:18px}
+.card{background:var(--card);padding:16px;border-radius:12px;color:#fff;min-height:160px;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between}
+.card-icon{font-size:34px}
+.card h3{margin:8px;}
+
+.image-cube {
+  width: 120px;
+  height: 120px;
+  background: #003566;
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.7);
+  margin: 20px auto; /* centers it under the 3D Software Maintenance */
+  max-width:120px;
+}
+
+.image-cube img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.contactcontainer{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content: center;
+    gap:1rem;
+    margin: 2rem auto;
+    max-width: 2000px;
+}
+.contacttitle{
+    display:flex;
+    align-items:center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 10px;
+    font-size: 1rem;
+}
+.contact{
+    display:flex;
+    align-items: left;
+    justify-content: left;
+    margin-right: 5rem;
+    gap: 1rem;
+}
+.contact h3, .contact a{
+    color:#eeeeee;
+    text-decoration: none;
+    justify-content: left;
+}
+.emailAndPhone{
+    display:flexbox;
+    align-items: left;
+    justify-content: left;
+    gap: 3rem;
+}
+
+.socialMedia{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+.socialMedia a{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50px;
+    background-color:rgba(57 , 62 , 70 , 0.5);
+    backdrop-filter: blur(4px);
+    padding: 1rem;
+}
+.socialMedia img{
+    width: 24px;
+    height:24px;
+}
+footer{
+    color:#eeeeee;
+    padding: 2rem;
+    text-align: center;
+}
+:root {
+  --dark-blue: #0758ee;
+  --accent: #0077ff;
+  --card: #0976eb;
+}
+
+/* Popup background */
+.popup {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Popup box */
+.popup-content {
+  background: var(--card);
+  padding: 30px;
+  border-radius: 14px;
+  width: 750px;      /* Bigger width */
+  max-width: 90%;    /* Responsive on mobile */
+  color: white;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.45);
+  animation: fadeIn 0.25s ease-in-out;
+}
+
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Close button */
+.close {
+  float: right;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+/* Image */
+.popup-img {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+/* Button to open popup */
+.btn-open {
+  background: var(--accent);
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.btn-open:hover {
+  background: var(--dark-blue);
+}
+.back-btn {
+  background: transparent;
+  color: #fff;
+  border: 2px solid #fff;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.25s ease;
+}
+
+.back-btn:hover {
+  background: #ffffff22;
+}
+
+
+/* SEARCH BAR (TOP RIGHT CORNER) */
+.search-wrapper {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  z-index: 10;
+}
+
+.search-input {
+  width: 220px;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(5px);
+  color: white;
+  font-size: 15px;
+  outline: none;
+  transition: 0.25s ease;
+}
+
+.search-input::placeholder {
+  color: #eeeeee;
+}
+
+.search-input:focus {
+  background: rgba(255, 255, 255, 0.28);
+}
+</style>
+
+</html>
+
+
