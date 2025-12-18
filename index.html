@@ -97,7 +97,6 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/jpg" href="https://i.ibb.co/Qvt1kkK9/Logo-Whattech.jpg" alt="Logo Whattech" border="0">
   <title>WhatTech</title>
 
   <link rel="stylesheet" href="style.css">
@@ -560,13 +559,158 @@ footer{
   background: rgba(255, 255, 255, 0.28);
 }
 </style>
+<style>
+/* =========================
+   TABLETS (≤ 1024px)
+========================= */
+@media (max-width: 1024px) {
+
+  header {
+    text-align: center;
+    padding: 20px;
+  }
+
+  .logo {
+    font-size: 30px;
+  }
+
+  .tag {
+    text-align: center;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .popup-content {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .contact {
+    margin-right: 0;
+    justify-content: center;
+  }
+}
+
+
+/* =========================
+   MOBILE (≤ 768px)
+========================= */
+@media (max-width: 768px) {
+
+  /* Header */
+  .logo {
+    font-size: 26px;
+  }
+
+  .tag {
+    font-size: 14px;
+  }
+
+  /* Categories buttons */
+  .buttons {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .cat-btn {
+    width: 90%;
+    text-align: center;
+  }
+
+  /* Products */
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    align-items: center;
+    text-align: center;
+  }
+
+  .image-cube {
+    width: 100px;
+    height: 100px;
+  }
+
+  /* Popup */
+  .popup-content > div {
+    flex-direction: column !important;
+    gap: 16px;
+  }
+
+  .popup-content {
+    padding: 18px;
+  }
+
+  .popup-title {
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .popup-text,
+  .price {
+    text-align: center;
+  }
+
+  .btn-open {
+    width: 100%;
+  }
+
+  /* Theme button */
+  .theme-toggle {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  /* Contact section */
+  .contactcontainer {
+    padding: 0 16px;
+    text-align: center;
+  }
+
+  .contact,
+  .emailAndPhone {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  footer {
+    font-size: 14px;
+  }
+}
+
+
+/* =========================
+   SMALL PHONES (≤ 480px)
+========================= */
+@media (max-width: 480px) {
+
+  .logo {
+    font-size: 22px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  .desc {
+    font-size: 14px;
+  }
+
+  .price {
+    font-size: 16px;
+  }
+
+  .btn,
+  .btn-open {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+
+
+</style>
 </html>
-
-
-
-
-
-
-
-
-
