@@ -1,395 +1,175 @@
 <!DOCTYPE html>
-<script>
-(function(){
-    function isHex(h){ return /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test((h||'').trim()); }
-    function to6(h){ h = h.replace('#',''); if (h.length===3) h = h.split('').map(c=>c+c).join(''); return h; }
-    function shadeHex(hex, percent){
-        hex = to6(hex);
-        const num = parseInt(hex,16);
-        let r = (num >> 16) & 0xFF;
-        let g = (num >> 8) & 0xFF;
-        let b = num & 0xFF;
-        r = Math.round(r * (100 + percent) / 100);
-        g = Math.round(g * (100 + percent) / 100);
-        b = Math.round(b * (100 + percent) / 100);
-        r = Math.max(0, Math.min(255, r));
-        g = Math.max(0, Math.min(255, g));
-        b = Math.max(0, Math.min(255, b));
-        return '#' + ((1<<24) + (r<<16) + (g<<8) + b).toString(16).slice(1);
-    }
-
-    // Capture clicks on the theme button before the existing handler and replace behavior.
-    document.addEventListener('click', function(e){
-        const btn = e.target.closest && e.target.closest('.theme-toggle');
-        if (!btn) return;
-        // Prevent the original inline listener from running
-        e.stopImmediatePropagation();
-        e.preventDefault();
-
-        const color = prompt('Enter a color (name or hex, e.g. #0077ff):', '#0758ee');
-        if (!color) return;
-
-        const root = document.documentElement.style;
-        if (isHex(color)) {
-            // Set multiple CSS variables so the whole theme updates
-            root.setProperty('--accent', color);
-            root.setProperty('--dark-blue', shadeHex(color, -18)); // slightly darker
-            root.setProperty('--card', shadeHex(color, 8));        // slightly lighter
-        } else {
-            // For named colors, just apply the provided name to all vars
-            root.setProperty('--accent', color);
-            root.setProperty('--dark-blue', color);
-            root.setProperty('--card', color);
-        }
-    }, true);
-})();
-</script>
-<style>
-    .theme-toggle {
-        position: fixed;
-        top: 14px;
-        right: 14px;
-        background: linear-gradient(135deg, var(--accent), var(--dark-blue));
-        color: #fff;
-        border: none;
-        padding: 10px 16px;
-        border-radius: 8px;
-        cursor: pointer;
-        z-index: 50;
-        font-weight: 600;
-        font-size: 14px;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 12px rgba(7, 88, 238, 0.3);
-    }
-
-    .theme-toggle:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(7, 88, 238, 0.5);
-    }
-
-    .theme-toggle:active {
-        transform: translateY(0);
-    }
-
-    .light-mode .theme-toggle {
-        background: linear-gradient(135deg, #0077ff, #003566);
-    }
-       .card:hover{
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(7, 88, 238, 0.5);
-    
-    }
-    .card:active {
-        transform:translateY(0);
-    }
-</style>
-<button class="theme-toggle">Change Theme Color</button>
-<script>
-    const themeToggleBtn = document.querySelector('.theme-toggle');
-    themeToggleBtn.addEventListener('click', () => {
-        const color = prompt("Enter a color (name or hex code):", "#ffffff");
-        if (color) {
-            document.documentElement.style.setProperty('--dark-blue', color);
-        }
-    });
-</script>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>WhatTech</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WhatTech</title>
 
-  <link rel="stylesheet" href="style.css">
+<!-- Three.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 
-  <!-- Three.js (you already had this) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.134.0/examples/js/loaders/GLTFLoader.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.134.0/examples/js/controls/OrbitControls.js"></script>
-
- 
-
-</head>
-
-
-<body class="dark-mode">
-
-<header>
-  <div class="logo-row">
-    <h1 class="logo"><span class="logo-blue">What</span>Tech</h1>
-  </div>
-  <p class="tag">Your Hub for Laptops & Tech Services</p>
-</header>
-
-
-<!-- CATEGORY BUTTONS -->
-<section class="categories">
-  <h2>Categories</h2>
-  <div class="buttons">
-    <a href="laptops2.html" class="cat-btn">Laptops</a>
-    <a href="Software Maintenance.html" class="cat-btn">Software Maintenance</a>
-  </div>
-</section>
-
-
-<!-- FEATURED PRODUCTS -->
-<section class="products" aria-label="Featured products">
-  <h2>Featured Products</h2>
-
-  <div class="product-grid">
-
-    <!-- CARD 1 -->
-    <article class="card">
-      <div class="image-cube">
-      <img src="https://i.ibb.co/605D9f0w/Acer-Travel-Mate.jpg" alt="Acer Travel Mate" border="0">
-      </div>
-      <h3>Acer Travel Mate</h3>
-      <p class="desc">CORE I5 11TH 8GB 256GB</p>
-      <p class="price">$224.99</p>
-      <div class="card-actions">
-        <button
-          class="btn view-btn"
-          data-title="ACER TRAVEL MATE"
-          data-desc="CORE I5 11TH 8GB 256"
-          data-price="$224.99"
-          data-img="https://i.ibb.co/605D9f0w/Acer-Travel-Mate.jpg" alt="Acer Travel Mate" border="0"
-        >View</button>
-      </div>
-    </article>
-
-    <!-- CARD 2 -->
-    <article class="card">
-      <div class="image-cube">
-<img src="https://i.ibb.co/Xrj2fw5z/DELL-5310-2-IN1.jpg" alt="DELL 5310 2IN1" border="0">
-      </div>
-      <h3>DELL 5310 2IN1</h3>
-      <p class="desc">CORE I7 10TH 16RAM 256NVME 13.3 TOUCH FLIP</p>
-      <p class="price">$384.99</p>
-      <div class="card-actions">
-        <button
-          class="btn view-btn"
-          data-title="DELL 5310 2IN1"
-          data-desc="CORE I7 10TH 16RAM 256NVME 13.3 TOUCH FLIP"
-          data-price="$384.99"
-          data-img="https://i.ibb.co/Xrj2fw5z/DELL-5310-2-IN1.jpg" alt="DELL 5310 2IN1" border="0"
-        >View</button>
-      </div>
-    </article>
-
-    <!-- CARD 3 -->
-    <article class="card">
-      <div class="image-cube">
-    <img src="https://i.ibb.co/PvHg9fwd/DELL-7390.jpg" alt="DELL 7390" border="0">
-      </div>
-      <h3>DELL 7390</h3>
-      <p class="desc">CORE I7 12TH - 16GB 256</p>
-      <p class="price">$259.99</p>
-      <div class="card-actions">
-        <button
-          class="btn view-btn"
-          data-title="DELL 7390"
-          data-desc="CORE I5 8TH 8RAM 256 13.3 TOUCH"
-          data-price="$259.99"
-          data-img="https://i.ibb.co/PvHg9fwd/DELL-7390.jpg" alt="DELL 7390" border="0"
-        >View</button>
-      </div>
-    </article>
-
-  </div>
-</section>
-
-
-<!-- FULL POPUP (copied from laptops2.html) -->
-<div id="popup" class="popup" aria-hidden="true" role="dialog" aria-modal="true">
-  <div class="popup-content" role="document">
-
-    <button id="closePopup" class="close" aria-label="Close popup">&times;</button>
-
-    <div style="display:flex;gap:20px;align-items:flex-start;">
-
-      <!-- Left image -->
-      <div style="flex:0 0 240px;">
-        <img id="popupImg" src="" alt="" class="popup-img"
-             style="width:100%;height:auto;border-radius:8px;">
-      </div>
-
-      <!-- Right details -->
-      <div style="flex:1;">
-        <h2 id="popupTitle" class="popup-title" style="margin-top:0;">Product Title</h2>
-
-        <p id="popupText" class="popup-text"
-           style="margin:8px 0 12px;opacity:0.95;"></p>
-
-        <p id="popupPrice" class="price"
-           style="font-size:20px;margin-bottom:14px;color:#ffd7d7;"></p>
-
-        <button class="btn-open" id="addToCartBtn">Add to Cart</button>
-
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<br><br><br><br><br>
-
-<!-- CONTACT SECTION -->
-<section class="contactcontainer" id="contactMe">
-  <div class="contacttitle">
-    <h1 class="aboutName">Contact</h1>
-    <h1 class="aboutTitle">Us</h1>
-  </div>
-
-  <div class="contact"> 
-<img src="https://i.ibb.co/9kK0H9g0/gmail.jpg" alt="gmail" border="0" width="30px" height="30px"></a>
-    
-
-    <a href="mailto:whattech4@gmail.com">whattech4@gmail.com</a>
-  </div>
-
-  <div class="emailAndPhone">
-    <p>Customer Services
-      <a href="https://wa.me//+96181972001" target="_blank">
-        <img src="https://i.ibb.co/k6vD6pyT/Screenshot-2-12-2025-225619-www-bing-com.jpg" alt="Screenshot-2-12-2025-225619-www-bing-com" border="0" width="30px" height="30px"></a>
-      </a>
-    </p>
-  </div>
-
-  <div class="emailAndPhone">
-    <p>Maintenance
-      <a href="https://wa.me/message/XTNHNTRU4TYCJ1" target="_blank">
-  <img src="https://i.ibb.co/k6vD6pyT/Screenshot-2-12-2025-225619-www-bing-com.jpg" alt="Screenshot-2-12-2025-225619-www-bing-com" border="0" width="30px" height="30px"></a>
-      </a>
-    </p>
-  </div>
-
-</section>
-
-<hr/>
-
-<footer>
-  <p>© <span id="year"></span> WhatTech</p>
-  <p class="wcag"><span class="wcag-badge"></span></p>
-</footer>
-
-
-<!-- POPUP SCRIPT (FULL FUNCTIONAL) -->
-<script>
-document.getElementById("year").textContent = new Date().getFullYear();
-
-// Popup elements
-const popup = document.getElementById("popup");
-const closePopupBtn = document.getElementById("closePopup");
-
-const popupTitle = document.getElementById("popupTitle");
-const popupText = document.getElementById("popupText");
-const popupPrice = document.getElementById("popupPrice");
-const popupImg = document.getElementById("popupImg");
-const addToCartBtn = document.getElementById("addToCartBtn");
-
-
-// OPEN POPUP when any .view-btn is clicked
-document.querySelectorAll(".view-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-
-    popupTitle.textContent = btn.dataset.title;
-    popupText.textContent = btn.dataset.desc;
-    popupPrice.textContent = btn.dataset.price;
-    popupImg.src = btn.dataset.img;
-    popupImg.alt = btn.dataset.title;
-
-    popup.style.display = "flex";
-    popup.setAttribute("aria-hidden", "false");
-
-    addToCartBtn.onclick = () =>
-      alert(btn.dataset.title + " For your orders contact us on: +961 78 843 719.");
-
-  });
-});
-
-
-// CLOSE POPUP
-closePopupBtn.onclick = () => {
-  popup.style.display = "none";
-  popup.setAttribute("aria-hidden", "true");
-};
-
-window.onclick = e => {
-  if (e.target === popup) {
-    popup.style.display = "none";
-    popup.setAttribute("aria-hidden", "true");
-  }
-};
-
-// ESC key closes popup
-window.addEventListener("keydown", e => {
-  if (e.key === "Escape") {
-    popup.style.display = "none";
-    popup.setAttribute("aria-hidden", "true");
-  }
-});
-</script>
-
-</body>
-<style>:root{
+<style>
+:root{
   --dark-blue:#0758ee;
   --accent:#0077ff;
   --card:#0976eb;
 }
 
 *{box-sizing:border-box}
-body{margin:0;font-family:Inter, Arial, sans-serif;transition:background 0.35s,color 0.35s}
+body{
+  margin:0;
+  font-family:Inter, Arial, sans-serif;
+  background:linear-gradient(180deg,#000,var(--dark-blue));
+  color:#fff;
+}
 
-/* DARK MODE */
-.dark-mode{background:linear-gradient(180deg,#000000, var(--dark-blue));color:#fff}
-
-/* LIGHT MODE */
-.light-mode{background:#ffffff;color:#031017}
-
-/* Toggle */
-.mode-toggle{position:fixed;top:14px;right:14px;background:#003566;color:#fff;border:none;padding:8px 10px;border-radius:8px;cursor:pointer;z-index:50}
-.light-mode .mode-toggle{background:#222;color:#fff}
-
-header{padding:28px 20px;text-align:left}
-.logo-row{display:flex;align-items:center;justify-content:space-between;max-width:1100px;margin:0 auto}
-.logo{font-size:36px;margin:0}
+/* ================= HEADER ================= */
+header{
+  padding:28px 20px;
+  text-align:center;
+}
+.logo{
+  font-size:36px;
+  margin:0;
+}
 .logo-blue{color:var(--accent)}
-.admin-link{text-decoration:none;font-size:18px;margin-left:12px}
-.tag{max-width:1100px;margin:6px auto 0;padding:0 20px;opacity:0.9}
+.tag{opacity:.85}
 
-.hero{display:flex;gap:20px;align-items:center;justify-content:center;max-width:1100px;margin:30px auto;padding:20px}
-.laptop-3d{width:480px;height:320px;border-radius:12px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.6);flex:0 0 480px}
-.hero-text{max-width:520px;text-align:left}
+/* ================= THEME BUTTON ================= */
+.theme-toggle{
+  position:fixed;
+  top:14px;
+  right:14px;
+  background:linear-gradient(135deg,var(--accent),var(--dark-blue));
+  color:#fff;
+  border:none;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  z-index:100;
+}
 
+/* ================= CATEGORIES ================= */
 .categories{text-align:center;margin-top:20px}
-.buttons{display:flex;gap:18px;justify-content:center;flex-wrap:wrap}
-.cat-btn{padding:14px 26px;border-radius:10px;background:#003566;color:#fff;text-decoration:none;font-weight:600}
-.light-mode .cat-btn{background:#e9eef5;color:#000}
-
-.products{max-width:1100px;margin:36px auto;padding:0 20px}
-.product-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:18px}
-.card{background:var(--card);padding:16px;border-radius:12px;color:#fff;min-height:160px;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between}
-.card-icon{font-size:34px}
-.card h3{margin:8px;}
-
-.image-cube {
-  width: 120px;
-  height: 120px;
-  background: #003566;
-  border-radius: 14px;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.7);
-  margin: 20px auto; /* centers it under the 3D laptop */
-  max-width:120px;
+.buttons{
+  display:flex;
+  justify-content:center;
+  gap:18px;
+  flex-wrap:wrap;
+}
+.cat-btn{
+  padding:14px 26px;
+  border-radius:10px;
+  background:#003566;
+  color:#fff;
+  text-decoration:none;
+  font-weight:600;
 }
 
-.image-cube img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+/* ================= PRODUCTS ================= */
+.products{
+  max-width:1100px;
+  margin:36px auto;
+  padding:0 20px;
 }
+.product-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:18px;
+}
+
+/* CARD (CLICKABLE) */
+.card{
+  background:var(--card);
+  padding:16px;
+  border-radius:14px;
+  cursor:pointer;
+  transition:.3s;
+  text-align:center;
+}
+.card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 8px 18px rgba(0,0,0,.4);
+}
+
+.image-cube{
+  width:120px;
+  height:120px;
+  margin:0 auto 10px;
+  border-radius:14px;
+  overflow:hidden;
+}
+.image-cube img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.price{font-size:18px;color:#ffd7d7}
+
+/* ================= POPUP ================= */
+.popup{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  justify-content:center;
+  align-items:center;
+  z-index:1000;
+}
+.popup-content{
+  background:var(--card);
+  width:750px;
+  max-width:90%;
+  padding:25px;
+  border-radius:14px;
+  animation:fadeIn .25s ease;
+}
+@keyframes fadeIn{
+  from{opacity:0;transform:scale(.9)}
+  to{opacity:1;transform:scale(1)}
+}
+.close{
+  font-size:28px;
+  float:right;
+  cursor:pointer;
+}
+.popup-flex{
+  display:flex;
+  gap:20px;
+}
+.popup-img{
+  width:240px;
+  border-radius:10px;
+}
+.btn-open{
+  background:var(--accent);
+  color:#fff;
+  border:none;
+  padding:10px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  width:100%;
+}
+
+.logo-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    max-width:1100px;
+    margin:0 auto;
+    }
+.logo{
+    font-size:36px;
+    margin:0;
+    }
+.logo-blue{
+    color:var(--accent);
+    }
+
+
+/* ================= CONTACT ================= */
+
 .contactcontainer{
     display:flex;
     flex-direction:column;
@@ -399,6 +179,7 @@ header{padding:28px 20px;text-align:left}
     margin: 2rem auto;
     max-width: 2000px;
 }
+    
 .contacttitle{
     display:flex;
     align-items:center;
@@ -445,273 +226,163 @@ header{padding:28px 20px;text-align:left}
     width: 24px;
     height:24px;
 }
+    
 footer{
-    color:#eeeeee;
-    padding: 2rem;
-    text-align: center;
-}
-:root {
-  --dark-blue: #0758ee;
-  --accent: #0077ff;
-  --card: #0976eb;
+  text-align:center;
+  padding:20px;
+  opacity:.8;
 }
 
-/* Popup background */
-.popup {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-/* Popup box */
-.popup-content {
-  background: var(--card);
-  padding: 30px;
-  border-radius: 14px;
-  width: 750px;      /* Bigger width */
-  max-width: 90%;    /* Responsive on mobile */
-  color: white;
-  box-shadow: 0 5px 25px rgba(0,0,0,0.45);
-  animation: fadeIn 0.25s ease-in-out;
-}
-
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.9); }
-  to   { opacity: 1; transform: scale(1); }
-}
-
-/* Close button */
-.close {
-  float: right;
-  font-size: 28px;
-  cursor: pointer;
-}
-
-/* Image */
-.popup-img {
-  width: 100%;
-  border-radius: 8px;
-  margin-bottom: 15px;
-}
-
-/* Button to open popup */
-.btn-open {
-  background: var(--accent);
-  color: white;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.btn-open:hover {
-  background: var(--dark-blue);
-}
-.back-btn {
-  background: transparent;
-  color: #fff;
-  border: 2px solid #fff;
-  padding: 6px 14px;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  margin-top: 10px;
-  transition: 0.25s ease;
-}
-
-.back-btn:hover {
-  background: #ffffff22;
-}
-
-
-/* SEARCH BAR (TOP RIGHT CORNER) */
-.search-wrapper {
-  position: absolute;
-  top: 25px;
-  right: 25px;
-  z-index: 10;
-}
-
-.search-input {
-  width: 220px;
-  padding: 10px 14px;
-  border: none;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(5px);
-  color: white;
-  font-size: 15px;
-  outline: none;
-  transition: 0.25s ease;
-}
-
-.search-input::placeholder {
-  color: #eeeeee;
-}
-
-.search-input:focus {
-  background: rgba(255, 255, 255, 0.28);
+/* ================= RESPONSIVE ================= */
+@media(max-width:768px){
+  .popup-flex{flex-direction:column;text-align:center}
+  .popup-img{width:100%}
 }
 </style>
-<style>
-/* =========================
-   TABLETS (≤ 1024px)
-========================= */
-@media (max-width: 1024px) {
+</head>
 
-  header {
-    text-align: center;
-    padding: 20px;
+<body>
+
+<button class="theme-toggle">Change Theme</button>
+
+<header>
+  <h1 class="logo"><span class="logo-blue">What</span>Tech</h1>
+  <p class="tag">Your Hub for Laptops & Tech Services</p>
+</header>
+
+<section class="categories">
+  <h2>Categories</h2>
+  <div class="buttons">
+    <a class="cat-btn" href="#">Laptops</a>
+    <a class="cat-btn" href="#">Software Maintenance</a>
+  </div>
+</section>
+
+<section class="products">
+  <h2>Featured Products</h2>
+
+  <div class="product-grid">
+
+    <!-- CARD 1 -->
+    <article class="card"
+      data-title="Acer Travel Mate"
+      data-desc="CORE I5 11TH • 8GB RAM • 256GB SSD"
+      data-price="$224.99"
+      data-img="https://i.ibb.co/605D9f0w/Acer-Travel-Mate.jpg">
+      <div class="image-cube">
+        <img src="https://i.ibb.co/605D9f0w/Acer-Travel-Mate.jpg">
+      </div>
+      <h3>Acer Travel Mate</h3>
+      <p class="price">$224.99</p>
+    </article>
+
+    <!-- CARD 2 -->
+    <article class="card"
+      data-title="DELL 5310 2IN1"
+      data-desc="CORE I7 10TH • 16GB RAM • TOUCH"
+      data-price="$384.99"
+      data-img="https://i.ibb.co/Xrj2fw5z/DELL-5310-2-IN1.jpg">
+      <div class="image-cube">
+        <img src="https://i.ibb.co/Xrj2fw5z/DELL-5310-2-IN1.jpg">
+      </div>
+      <h3>DELL 5310 2IN1</h3>
+      <p class="price">$384.99</p>
+    </article>
+
+    <!-- CARD 3 -->
+    <article class="card"
+      data-title="DELL 7390"
+      data-desc="CORE I7 12TH • 16GB RAM"
+      data-price="$259.99"
+      data-img="https://i.ibb.co/PvHg9fwd/DELL-7390.jpg">
+      <div class="image-cube">
+        <img src="https://i.ibb.co/PvHg9fwd/DELL-7390.jpg">
+      </div>
+      <h3>DELL 7390</h3>
+      <p class="price">$259.99</p>
+    </article>
+
+  </div>
+</section>
+    
+    <br><br><br><br><br>
+
+<!-- CONTACT SECTION -->
+<section class="contactcontainer" id="contactMe">
+  <div class="contacttitle">
+    <h1 class="aboutName">Contact</h1>
+    <h1 class="aboutTitle">Us</h1>
+  </div>
+
+  <div class="contact"> 
+<img src="https://i.ibb.co/9kK0H9g0/gmail.jpg" alt="gmail" border="0" width="30px" height="30px"></a>
+    
+
+    <a href="mailto:whattech4@gmail.com">whattech4@gmail.com</a>
+  </div>
+
+  <div class="emailAndPhone">
+    <p>Customer Services
+      <a href="https://wa.me//+96181972001" target="_blank">
+        <img src="https://i.ibb.co/k6vD6pyT/Screenshot-2-12-2025-225619-www-bing-com.jpg" alt="Screenshot-2-12-2025-225619-www-bing-com" border="0" width="30px" height="30px"></a>
+      </a>
+    </p>
+  </div>
+
+  <div class="emailAndPhone">
+    <p>Maintenance
+      <a href="https://wa.me/message/XTNHNTRU4TYCJ1" target="_blank">
+  <img src="https://i.ibb.co/k6vD6pyT/Screenshot-2-12-2025-225619-www-bing-com.jpg" alt="Screenshot-2-12-2025-225619-www-bing-com" border="0" width="30px" height="30px"></a>
+      </a>
+    </p>
+  </div>
+
+</section>
+
+
+
+
+<!-- POPUP -->
+<div class="popup" id="popup">
+  <div class="popup-content">
+    <span class="close" id="closePopup">&times;</span>
+
+    <div class="popup-flex">
+      <img id="popupImg" class="popup-img">
+      <div>
+        <h2 id="popupTitle"></h2>
+        <p id="popupText"></p>
+        <p id="popupPrice" class="price"></p>
+        <button class="btn-open">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+</div>
+<hr/>
+
+<footer>© 2025 WhatTech</footer>
+
+<script>
+const popup=document.getElementById("popup");
+const closePopup=document.getElementById("closePopup");
+const popupTitle=document.getElementById("popupTitle");
+const popupText=document.getElementById("popupText");
+const popupPrice=document.getElementById("popupPrice");
+const popupImg=document.getElementById("popupImg");
+
+document.querySelectorAll(".card").forEach(card=>{
+  card.onclick=()=>{
+    popupTitle.textContent=card.dataset.title;
+    popupText.textContent=card.dataset.desc;
+    popupPrice.textContent=card.dataset.price;
+    popupImg.src=card.dataset.img;
+    popup.style.display="flex";
   }
+});
 
-  .logo {
-    font-size: 30px;
-  }
+closePopup.onclick=()=>popup.style.display="none";
+window.onclick=e=>{if(e.target===popup)popup.style.display="none";}
+</script>
 
-  .tag {
-    text-align: center;
-  }
-
-  .product-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .popup-content {
-    width: 90%;
-    padding: 20px;
-  }
-
-  .contact {
-    margin-right: 0;
-    justify-content: center;
-  }
-}
-
-
-/* =========================
-   MOBILE (≤ 768px)
-========================= */
-@media (max-width: 768px) {
-
-  /* Header */
-  .logo {
-    font-size: 26px;
-  }
-
-  .tag {
-    font-size: 14px;
-  }
-
-  /* Categories buttons */
-  .buttons {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .cat-btn {
-    width: 90%;
-    text-align: center;
-  }
-
-  /* Products */
-  .product-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .card {
-    align-items: center;
-    text-align: center;
-  }
-
-  .image-cube {
-    width: 100px;
-    height: 100px;
-  }
-
-  /* Popup */
-  .popup-content > div {
-    flex-direction: column !important;
-    gap: 16px;
-  }
-
-  .popup-content {
-    padding: 18px;
-  }
-
-  .popup-title {
-    font-size: 20px;
-    text-align: center;
-  }
-
-  .popup-text,
-  .price {
-    text-align: center;
-  }
-
-  .btn-open {
-    width: 100%;
-  }
-
-  /* Theme button */
-  .theme-toggle {
-    padding: 8px 12px;
-    font-size: 12px;
-  }
-
-  /* Contact section */
-  .contactcontainer {
-    padding: 0 16px;
-    text-align: center;
-  }
-
-  .contact,
-  .emailAndPhone {
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-  }
-
-  footer {
-    font-size: 14px;
-  }
-}
-
-
-/* =========================
-   SMALL PHONES (≤ 480px)
-========================= */
-@media (max-width: 480px) {
-
-  .logo {
-    font-size: 22px;
-  }
-
-  h2 {
-    font-size: 20px;
-  }
-
-  .desc {
-    font-size: 14px;
-  }
-
-  .price {
-    font-size: 16px;
-  }
-
-  .btn,
-  .btn-open {
-    font-size: 14px;
-    padding: 10px;
-  }
-}
-
-
-</style>
+</body>
 </html>
-
