@@ -18,73 +18,10 @@
         return '#' + ((1<<24) + (r<<16) + (g<<8) + b).toString(16).slice(1);
     }
 
-    // Capture clicks on the theme button before the existing handler and replace behavior.
-    document.addEventListener('click', function(e){
-        const btn = e.target.closest && e.target.closest('.theme-toggle');
-        if (!btn) return;
-        // Prevent the original inline listener from running
-        e.stopImmediatePropagation();
-        e.preventDefault();
-
-        const color = prompt('Enter a color (name or hex, e.g. #0077ff):', '#0758ee');
-        if (!color) return;
-
-        const root = document.documentElement.style;
-        if (isHex(color)) {
-            // Set multiple CSS variables so the whole theme updates
-            root.setProperty('--accent', color);
-            root.setProperty('--dark-blue', shadeHex(color, -18)); // slightly darker
-            root.setProperty('--card', shadeHex(color, 8));        // slightly lighter
-        } else {
-            // For named colors, just apply the provided name to all vars
-            root.setProperty('--accent', color);
-            root.setProperty('--dark-blue', color);
-            root.setProperty('--card', color);
-        }
-    }, true);
-})();
+ 
 </script>
-<style>
-    .theme-toggle {
-        position: fixed;
-        top: 14px;
-        right: 14px;
-        background: linear-gradient(135deg, var(--accent), var(--dark-blue));
-        color: #fff;
-        border: none;
-        padding: 10px 16px;
-        border-radius: 8px;
-        cursor: pointer;
-        z-index: 50;
-        font-weight: 600;
-        font-size: 14px;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 12px rgba(7, 88, 238, 0.3);
-    }
 
-    .theme-toggle:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(7, 88, 238, 0.5);
-    }
 
-    .theme-toggle:active {
-        transform: translateY(0);
-    }
-
-    .light-mode .theme-toggle {
-        background: linear-gradient(135deg, #0077ff, #003566);
-    }
-</style>
-<button class="theme-toggle">Change Theme Color</button>
-<script>
-    const themeToggleBtn = document.querySelector('.theme-toggle');
-    themeToggleBtn.addEventListener('click', () => {
-        const color = prompt("Enter a color (name or hex code):", "#ffffff");
-        if (color) {
-            document.documentElement.style.setProperty('--dark-blue', color);
-        }
-    });
-</script>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -559,6 +496,7 @@ footer{
 </style>
 
 </html>
+
 
 
 
