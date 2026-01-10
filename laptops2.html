@@ -18,16 +18,8 @@
         return '#' + ((1<<24) + (r<<16) + (g<<8) + b).toString(16).slice(1);
     }
 
-        // Prevent the original inline listener from running
-        e.stopImmediatePropagation();
-        e.preventDefault();
-
-        const color = prompt('Enter a color (name or hex, e.g. #0077ff):', '#0758ee');
-        if (!color) return;
-
-        const root = document.documentElement.style;
-        if (isHex(color)) {
-          
+   
+})();
 </script>
 <style>
     .card:hover{
@@ -38,7 +30,6 @@
     .card:active {
         transform:translateY(0);
     }
-
 </style>
 
 <html lang="en">
@@ -82,7 +73,7 @@
     <!-- CARD 2 -->
     <article class="card">
       <div class="image-cube">
-       <img src="https://i.ibb.co/bMqdbxJD/Acer-Swift.jpg" alt="Acer-Swift" border="0"></a>
+       <img src="https://i.ibb.co/bMqdbxJD/Acer-Swift.jpg" alt="Acer-Swift" border="0">
       </div>
       <h3>ACER SWIFT</h3>
       <p class="desc">CORE I7 11TH - 8 GB 512GB</p>
@@ -988,7 +979,8 @@
         <p id="popupPrice" class="price" style="font-size:20px;margin-bottom:14px;color:#ffd7d7;"></p>
 
         <div style="display:flex;gap:12px;align-items:center;">
-          <button class="btn-open" id="addToCartBtn">Add to Cart</button>
+<button class="btn-open" id="addToCartBtn">Add to Cart</button>
+
         </div>
       </div>
     </div>
@@ -1004,7 +996,6 @@
   // year
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // Popup elements
   const popup = document.getElementById('popup');
   const closeBtn = document.getElementById('closePopup');
   const titleEl = document.getElementById('popupTitle');
@@ -1013,49 +1004,72 @@
   const imgEl = document.getElementById('popupImg');
   const addToCartBtn = document.getElementById('addToCartBtn');
 
-  // Open popup when any .view-btn is clicked, and populate content from data-* attributes
-  function openPopupFromButton(btn) {
-    const title = btn.dataset.title || 'Product';
-    const desc = btn.dataset.desc || '';
-    const price = btn.dataset.price || '';
-    const img = btn.dataset.img || '';
+  // OPEN POPUP FROM CARD
+  function openPopupFromCard(card) {
+    const btn = card.querySelector('.view-btn');
+    if (!btn) return;
 
-    titleEl.textContent = title;
-    textEl.textContent = desc;
-    priceEl.textContent = price;
+    titleEl.textContent = btn.dataset.title || 'Product';
+    textEl.textContent  = btn.dataset.desc || '';
+    priceEl.textContent = btn.dataset.price || '';
+    imgEl.src           = btn.dataset.img || '';
+    imgEl.alt           = btn.dataset.title || 'Product';
+addToCartBtn.onclick = () => {
+  const phone = "81972001";
 
-    // Set image, if file missing the browser will show broken image icon — replace filename as needed
-    imgEl.src = img;
-    imgEl.alt = title;
+  const message = `
+Hello WhatTech,
 
-    // update buttons with dataset (for example product id if you add one)
-    addToCartBtn.onclick = () => {
-      // placeholder behavior — replace with real cart code later
-      alert(title + " added to cart (demo).");
-    };
+I am interested in the following product:
 
-   
+Product: ${btn.dataset.title}
+Specs: ${btn.dataset.desc}
+Price: ${btn.dataset.price}
+Image: ${btn.dataset.img}
+
+Is this item available?
+`;
+
+  const whatsappURL =
+    "https://wa.me/" +
+    phone +
+    "?text=" +
+    encodeURIComponent(message);
+
+  window.open(whatsappURL, "_blank");
+};
+
 
     popup.style.display = 'flex';
     popup.setAttribute('aria-hidden','false');
   }
 
-  document.querySelectorAll('.view-btn').forEach(btn => {
-    btn.addEventListener('click', () => openPopupFromButton(btn));
+  // CLICK ANYWHERE ON CARD
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', () => openPopupFromCard(card));
   });
 
-  // close handlers
-  closeBtn.addEventListener('click', () => {
+  // CLOSE POPUP
+  closeBtn.onclick = () => {
     popup.style.display = 'none';
     popup.setAttribute('aria-hidden','true');
-  });
+  };
 
-  window.addEventListener('click', (e) => {
+  window.onclick = e => {
     if (e.target === popup) {
       popup.style.display = 'none';
       popup.setAttribute('aria-hidden','true');
     }
+  };
+
+  window.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      popup.style.display = 'none';
+      popup.setAttribute('aria-hidden','true');
+    }
   });
+</script>
+<script>
 
   // keyboard: ESC to close
   window.addEventListener('keydown', (e) => {
@@ -1149,6 +1163,10 @@ header{padding:28px 20px;text-align:left}
   margin: 20px auto; /* centers it under the 3D laptop */
   max-width:120px;
 }
+    .card-actions {
+  display: none;
+}
+
 
 .image-cube img {
   width: 100%;
@@ -1326,9 +1344,3 @@ footer{
 </style>
 
 </html>
-
-
-
-
-
-
