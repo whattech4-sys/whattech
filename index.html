@@ -5,10 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WhatTech</title>
 
-    <link rel="shortcut icon" href="https://i.ibb.co/wZtvpHLg/Logo-Whattech.png">
-
-<!-- Three.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<link rel="shortcut icon" href="https://i.ibb.co/wZtvpHLg/Logo-Whattech.png">
 
 <style>
 :root{
@@ -17,56 +14,74 @@
   --card:#0976eb;
 }
 
-*{box-sizing:border-box}
-body{
+*{
+  box-sizing:border-box;
   margin:0;
+  padding:0;
+}
+
+body{
   font-family:Inter, Arial, sans-serif;
   background:linear-gradient(180deg,#000,var(--dark-blue));
   color:#fff;
+  line-height:1.6;
 }
 
 /* ================= HEADER ================= */
 header{
-  padding:28px 20px;
+  padding:24px 16px;
   text-align:center;
 }
+
 .logo{
-  font-size:36px;
-  margin:0;
+  font-size:clamp(26px,5vw,36px);
 }
+
 .logo-blue{color:var(--accent)}
-.tag{opacity:.85}
+.tag{opacity:.85;font-size:14px}
 
 /* ================= CATEGORIES ================= */
-.categories{text-align:center;margin-top:20px}
+.categories{
+  text-align:center;
+  padding:20px 16px;
+}
+
 .buttons{
   display:flex;
   justify-content:center;
-  gap:18px;
+  gap:12px;
   flex-wrap:wrap;
 }
+
 .cat-btn{
-  padding:14px 26px;
+  padding:12px 22px;
   border-radius:10px;
   background:#003566;
   color:#fff;
   text-decoration:none;
   font-weight:600;
+  font-size:14px;
 }
 
 /* ================= PRODUCTS ================= */
 .products{
-  max-width:1100px;
-  margin:36px auto;
-  padding:0 20px;
-}
-.product-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:18px;
+  max-width:1200px;
+  margin:32px auto;
+  padding:0 16px;
 }
 
-/* CARD (CLICKABLE) */
+.products h2{
+  text-align:center;
+  margin-bottom:20px;
+}
+
+.product-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:16px;
+}
+
+/* CARD */
 .card{
   background:var(--card);
   padding:16px;
@@ -75,25 +90,35 @@ header{
   transition:.3s;
   text-align:center;
 }
+
 .card:hover{
   transform:translateY(-4px);
   box-shadow:0 8px 18px rgba(0,0,0,.4);
 }
 
 .image-cube{
-  width:120px;
-  height:120px;
+  width:100%;
+  max-width:150px;
+  aspect-ratio:1/1;
   margin:0 auto 10px;
   border-radius:14px;
   overflow:hidden;
 }
+
 .image-cube img{
   width:100%;
   height:100%;
   object-fit:cover;
 }
 
-.price{font-size:18px;color:#ffd7d7}
+.card h3{
+  font-size:16px;
+}
+
+.price{
+  font-size:16px;
+  color:#ffd7d7;
+}
 
 /* ================= POPUP ================= */
 .popup{
@@ -105,132 +130,103 @@ header{
   align-items:center;
   z-index:1000;
 }
+
 .popup-content{
   background:var(--card);
-  width:750px;
-  max-width:90%;
-  padding:25px;
+  width:90%;
+  max-width:720px;
+  padding:20px;
   border-radius:14px;
-  animation:fadeIn .25s ease;
 }
-@keyframes fadeIn{
-  from{opacity:0;transform:scale(.9)}
-  to{opacity:1;transform:scale(1)}
-}
+
 .close{
-  font-size:28px;
+  font-size:26px;
   float:right;
   cursor:pointer;
 }
+
 .popup-flex{
   display:flex;
-  gap:20px;
+  gap:16px;
+  align-items:center;
 }
+
 .popup-img{
-  width:240px;
+  width:220px;
   border-radius:10px;
 }
+
 .btn-open{
   background:var(--accent);
   color:#fff;
   border:none;
-  padding:10px 16px;
+  padding:12px;
   border-radius:8px;
   cursor:pointer;
   width:100%;
+  margin-top:10px;
+  font-size:14px;
 }
-
-.logo-row{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    max-width:1100px;
-    margin:0 auto;
-    }
-.logo{
-    font-size:36px;
-    margin:0;
-    }
-.logo-blue{
-    color:var(--accent);
-    }
-
 
 /* ================= CONTACT ================= */
-
 .contactcontainer{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content: center;
-    gap:1rem;
-    margin: 2rem auto;
-    max-width: 2000px;
-}
-    
-.contacttitle{
-    display:flex;
-    align-items:center;
-    justify-content: center;
-    gap: 1rem;
-    margin-bottom: 10px;
-    font-size: 1rem;
-}
-.contact{
-    display:flex;
-    align-items: left;
-    justify-content: left;
-    margin-right: 5rem;
-    gap: 1rem;
-}
-.contact h3, .contact a{
-    color:#eeeeee;
-    text-decoration: none;
-    justify-content: left;
-}
-.emailAndPhone{
-    display:flexbox;
-    align-items: left;
-    justify-content: left;
-    gap: 3rem;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:16px;
+  padding:32px 16px;
+  text-align:center;
 }
 
-.socialMedia{
-    display:flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
+.contacttitle{
+  display:flex;
+  gap:8px;
+  font-size:20px;
 }
-.socialMedia a{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50px;
-    background-color:rgba(57 , 62 , 70 , 0.5);
-    backdrop-filter: blur(4px);
-    padding: 1rem;
+
+.contact{
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
-.socialMedia img{
-    width: 24px;
-    height:24px;
+
+.contact a{
+  color:#eee;
+  text-decoration:none;
+  font-size:14px;
 }
-    
+
+.emailAndPhone p{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:14px;
+}
+
+/* ================= FOOTER ================= */
 footer{
   text-align:center;
-  padding:20px;
+  padding:16px;
   opacity:.8;
+  font-size:13px;
 }
 
-/* ================= RESPONSIVE ================= */
-@media(max-width:768px){
-  .popup-flex{flex-direction:column;text-align:center}
-  .popup-img{width:100%}
+/* ================= MOBILE ================= */
+@media (max-width:768px){
+  .popup-flex{
+    flex-direction:column;
+    text-align:center;
+  }
+
+  .popup-img{
+    width:100%;
+    max-width:280px;
+  }
 }
 </style>
 </head>
 
 <body>
-
 
 <header>
   <h1 class="logo"><span class="logo-blue">What</span>Tech</h1>
@@ -241,7 +237,7 @@ footer{
   <h2>Categories</h2>
   <div class="buttons">
     <a class="cat-btn" href="laptops2.html">Laptops</a>
-    <a class="cat-btn" href="Software Maintenance">Software Maintenance</a>
+    <a class="cat-btn" href="#">Software Maintenance</a>
   </div>
 </section>
 
@@ -250,7 +246,6 @@ footer{
 
   <div class="product-grid">
 
-    <!-- CARD 1 -->
     <article class="card"
       data-title="Acer Travel Mate"
       data-desc="CORE I5 11TH • 8GB RAM • 256GB SSD"
@@ -263,7 +258,6 @@ footer{
       <p class="price">$224.99</p>
     </article>
 
-    <!-- CARD 2 -->
     <article class="card"
       data-title="DELL 5310 2IN1"
       data-desc="CORE I7 10TH • 16GB RAM • TOUCH"
@@ -276,7 +270,6 @@ footer{
       <p class="price">$384.99</p>
     </article>
 
-    <!-- CARD 3 -->
     <article class="card"
       data-title="DELL 7390"
       data-desc="CORE I7 12TH • 16GB RAM"
@@ -291,61 +284,50 @@ footer{
 
   </div>
 </section>
-    
-    <br><br><br><br><br>
 
-<!-- CONTACT SECTION -->
-<section class="contactcontainer" id="contactMe">
+<section class="contactcontainer">
   <div class="contacttitle">
-    <h1 class="aboutName">Contact</h1>
-    <h1 class="aboutTitle">Us</h1>
+    <h2>Contact</h2><h2>Us</h2>
   </div>
 
-  <div class="contact"> 
-<img src="https://i.ibb.co/9kK0H9g0/gmail.jpg" alt="gmail" border="0" width="30px" height="30px"></a>
-    
-
+  <div class="contact">
+    <img src="https://i.ibb.co/9kK0H9g0/gmail.jpg" width="26">
     <a href="mailto:whattech4@gmail.com">whattech4@gmail.com</a>
   </div>
 
   <div class="emailAndPhone">
-    <p>Customer Services
-      <a href="https://wa.me//+96181972001" target="_blank">
-        <img src="https://i.ibb.co/k6vD6pyT/Screenshot-2-12-2025-225619-www-bing-com.jpg" alt="Screenshot-2-12-2025-225619-www-bing-com" border="0" width="30px" height="30px"></a>
-      </a>
+    <p>Customer Service
+      <a href="https://wa.me/+96181972001" target="_blank">
+         <img src="https://i.ibb.co/k6vD6pyT/Screenshot-2-12-2025-225619-www-bing-com.jpg" alt="Screenshot-2-12-2025-225619-www-bing-com" border="0" width="30px" height="30px"></a>
+     
     </p>
   </div>
 
   <div class="emailAndPhone">
     <p>Maintenance
-      <a href="https://wa.me//+96178843719" target="_blank">
-  <img src="https://i.ibb.co/k6vD6pyT/Screenshot-2-12-2025-225619-www-bing-com.jpg" alt="Screenshot-2-12-2025-225619-www-bing-com" border="0" width="30px" height="30px"></a>
-      </a>
+      <a href="https://wa.me/+96178843719" target="_blank">
+        <img src="https://i.ibb.co/k6vD6pyT/Screenshot-2-12-2025-225619-www-bing-com.jpg" alt="Screenshot-2-12-2025-225619-www-bing-com" border="0" width="30px" height="30px"></a>
+        
     </p>
   </div>
-
 </section>
 
-
-
-
-<!-- POPUP -->
 <div class="popup" id="popup">
   <div class="popup-content">
     <span class="close" id="closePopup">&times;</span>
-
     <div class="popup-flex">
       <img id="popupImg" class="popup-img">
       <div>
         <h2 id="popupTitle"></h2>
         <p id="popupText"></p>
         <p id="popupPrice" class="price"></p>
-      <a href="https://wa.me//+96181972001" target="_blank"><button class="btn-open">Add to Cart</button></a>
+        <a href="https://wa.me/+96181972001" target="_blank">
+          <button class="btn-open">Add to Cart</button>
+        </a>
       </div>
     </div>
   </div>
 </div>
-<hr/>
 
 <footer>© 2026 WhatTech</footer>
 
@@ -373,9 +355,3 @@ window.onclick=e=>{if(e.target===popup)popup.style.display="none";}
 
 </body>
 </html>
-
-
-
-
-
-
