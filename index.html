@@ -333,75 +333,30 @@ footer{
 
 <script>
 
-  // OPEN POPUP FROM CARD
-  function openPopupFromCard(card) {
-    const btn = card.querySelector('.view-btn');
-    if (!btn) return;
+const popup=document.getElementById("popup");
+const closePopup=document.getElementById("closePopup");
+const popupTitle=document.getElementById("popupTitle");
+const popupText=document.getElementById("popupText");
+const popupPrice=document.getElementById("popupPrice");
+const popupImg=document.getElementById("popupImg");
 
-    titleEl.textContent = btn.dataset.title || 'Product';
-    textEl.textContent  = btn.dataset.desc || '';
-    priceEl.textContent = btn.dataset.price || '';
-    imgEl.src           = btn.dataset.img || '';
-    imgEl.alt           = btn.dataset.title || 'Product';
-addToCartBtn.onclick = () => {
-  const phone = "81972001";
-
-  const message = `
-Hello WhatTech,
-
-I am interested in the following product:
-
-Product: ${btn.dataset.title}
-Specs: ${btn.dataset.desc}
-Price: ${btn.dataset.price}
-Image: ${btn.dataset.img}
-
-Is this item available?
-`;
-
-  const whatsappURL =
-    "https://wa.me/" +
-    phone +
-    "?text=" +
-    encodeURIComponent(message);
-
-  window.open(whatsappURL, "_blank");
-};
-
-
-    popup.style.display = 'flex';
-    popup.setAttribute('aria-hidden','false');
+document.querySelectorAll(".card").forEach(card=>{
+  card.onclick=()=>{
+    popupTitle.textContent=card.dataset.title;
+    popupText.textContent=card.dataset.desc;
+    popupPrice.textContent=card.dataset.price;
+    popupImg.src=card.dataset.img;
+    popup.style.display="flex";
   }
-
-  // CLICK ANYWHERE ON CARD
-  document.querySelectorAll('.card').forEach(card => {
-    card.addEventListener('click', () => openPopupFromCard(card));
-  });
-
-  // CLOSE POPUP
-  closeBtn.onclick = () => {
-    popup.style.display = 'none';
-    popup.setAttribute('aria-hidden','true');
-  };
-
-  window.onclick = e => {
-    if (e.target === popup) {
-      popup.style.display = 'none';
-      popup.setAttribute('aria-hidden','true');
-    }
-  };
-
-  window.addEventListener('keydown', e => {
-    if (e.key === 'Escape') {
-      popup.style.display = 'none';
-      popup.setAttribute('aria-hidden','true');
-    }
-  });
+});
+closePopup.onclick=()=>popup.style.display="none";
+window.onclick=e=>{if(e.target===popup)popup.style.display="none";}
 
 </script>
 
 </body>
 </html>
+
 
 
 
