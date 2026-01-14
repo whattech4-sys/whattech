@@ -352,10 +352,51 @@ document.querySelectorAll(".card").forEach(card=>{
 closePopup.onclick=()=>popup.style.display="none";
 window.onclick=e=>{if(e.target===popup)popup.style.display="none";}
 
+  
+  // OPEN POPUP FROM CARD
+  function openPopupFromCard(card) {
+    const btn = card.querySelector('.view-btn');
+    if (!btn) return;
+
+    titleEl.textContent = btn.dataset.title || 'Product';
+    textEl.textContent  = btn.dataset.desc || '';
+    priceEl.textContent = btn.dataset.price || '';
+    imgEl.src           = btn.dataset.img || '';
+    imgEl.alt           = btn.dataset.title || 'Product';
+addToCartBtn.onclick = () => {
+  const phone = "81972001";
+
+  const message = `
+Hello WhatTech,
+
+I am interested in the following product:
+
+Product: ${btn.dataset.title}
+Specs: ${btn.dataset.desc}
+Price: ${btn.dataset.price}
+Image: ${btn.dataset.img}
+
+Is this item available?
+`;
+
+  const whatsappURL =
+    "https://wa.me/" +
+    phone +
+    "?text=" +
+    encodeURIComponent(message);
+
+  window.open(whatsappURL, "_blank");
+};
+
+
+    popup.style.display = 'flex';
+    popup.setAttribute('aria-hidden','false');
+  }
 </script>
 
 </body>
 </html>
+
 
 
 
