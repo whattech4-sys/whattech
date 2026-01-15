@@ -18,15 +18,45 @@
         return '#' + ((1<<24) + (r<<16) + (g<<8) + b).toString(16).slice(1);
     }
 
- 
+   
+})();
 </script>
+<style>
+    .card:hover{
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(7, 88, 238, 0.5);
+    
+    }
+    .card:active {
+        transform:translateY(0);
+    }
 
+/* Adjust popup image to fill space when close button is smaller on mobile */
+@media (max-width: 600px) {
+  #closePopup {
+    font-size: 18px;   /* smaller X */
+    width: 28px;       
+    height: 28px;
+    line-height: 28px;
+    top: 8px;          
+    right: 8px;
+  }
+
+  /* Make the image flex-grow to fill the remaining space */
+  .popup-content > div > div:first-child img {
+    width: 100%;      /* fill available horizontal space */
+    height: auto;     /* maintain aspect ratio */
+  }
+}
+
+
+</style>
 
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Software Maintenance - WhatTech</title>
+  <title>Laptops - WhatTech</title>
   <link rel="stylesheet" href="style.css" />
    <!-- 🔍 SEARCH BAR (Top Right Corner) -->
 <div class="search-wrapper">
@@ -47,17 +77,16 @@
   <!-- BACK BUTTON -->
   <button onclick="history.back()" class="back-btn">← Back</button>
 
-  <p class="tag">Software Maintenance Collection</p>
+  <p class="tag">Laptop Collection</p>
 
  
 
 
 <section class="products">
-  <h2>All Software Maintenances</h2>
+  <h2>All Laptops</h2>
 
-  <!-- Software Maintenance Cards Grid -->
-  <div class="product-grid" id="Software MaintenanceGrid">
-
+  <!-- Laptop Cards Grid -->
+  <div class="product-grid" id="laptopGrid">
 
 
     <!-- CARD 1-->
@@ -129,8 +158,7 @@
     </article>
 
 
-
-    <!-- You can duplicate a card block above to add more Software Maintenances -->
+    <!-- You can duplicate a card block above to add more laptops -->
 
 
   </div>
@@ -154,7 +182,8 @@
         <p id="popupPrice" class="price" style="font-size:20px;margin-bottom:14px;color:#ffd7d7;"></p>
 
         <div style="display:flex;gap:12px;align-items:center;">
-          <button class="btn-open" id="addToCartBtn">Add to Cart</button>
+<button class="btn-open" id="addToCartBtn">Add to Cart</button>
+
         </div>
       </div>
     </div>
@@ -170,7 +199,6 @@
   // year
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // Popup elements
   const popup = document.getElementById('popup');
   const closeBtn = document.getElementById('closePopup');
   const titleEl = document.getElementById('popupTitle');
@@ -179,49 +207,71 @@
   const imgEl = document.getElementById('popupImg');
   const addToCartBtn = document.getElementById('addToCartBtn');
 
-  // Open popup when any .view-btn is clicked, and populate content from data-* attributes
-  function openPopupFromButton(btn) {
-    const title = btn.dataset.title || 'Product';
-    const desc = btn.dataset.desc || '';
-    const price = btn.dataset.price || '';
-    const img = btn.dataset.img || '';
+  // OPEN POPUP FROM CARD
+  function openPopupFromCard(card) {
+    const btn = card.querySelector('.view-btn');
+    if (!btn) return;
 
-    titleEl.textContent = title;
-    textEl.textContent = desc;
-    priceEl.textContent = price;
+    titleEl.textContent = btn.dataset.title || 'Product';
+    textEl.textContent  = btn.dataset.desc || '';
+    priceEl.textContent = btn.dataset.price || '';
+    imgEl.src           = btn.dataset.img || '';
+    imgEl.alt           = btn.dataset.title || 'Product';
+addToCartBtn.onclick = () => {
+  const phone = "81972001";
 
-    // Set image, if file missing the browser will show broken image icon — replace filename as needed
-    imgEl.src = img;
-    imgEl.alt = title;
+  const message = `
+Hello WhatTech,
 
-    // update buttons with dataset (for example product id if you add one)
-    addToCartBtn.onclick = () => {
-      // placeholder behavior — replace with real cart code later
-      alert(title + " added to cart (demo).");
-    };
+I am interested in the following product:
 
-   
+Product: ${btn.dataset.title}
+Price: ${btn.dataset.price}
+Image: ${btn.dataset.img}
+
+Is this item available?
+`;
+
+  const whatsappURL =
+    "https://wa.me/" +
+    phone +
+    "?text=" +
+    encodeURIComponent(message);
+
+  window.open(whatsappURL, "_blank");
+};
+
 
     popup.style.display = 'flex';
     popup.setAttribute('aria-hidden','false');
   }
 
-  document.querySelectorAll('.view-btn').forEach(btn => {
-    btn.addEventListener('click', () => openPopupFromButton(btn));
+  // CLICK ANYWHERE ON CARD
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', () => openPopupFromCard(card));
   });
 
-  // close handlers
-  closeBtn.addEventListener('click', () => {
+  // CLOSE POPUP
+  closeBtn.onclick = () => {
     popup.style.display = 'none';
     popup.setAttribute('aria-hidden','true');
-  });
+  };
 
-  window.addEventListener('click', (e) => {
+  window.onclick = e => {
     if (e.target === popup) {
       popup.style.display = 'none';
       popup.setAttribute('aria-hidden','true');
     }
+  };
+
+  window.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      popup.style.display = 'none';
+      popup.setAttribute('aria-hidden','true');
+    }
   });
+</script>
+<script>
 
   // keyboard: ESC to close
   window.addEventListener('keydown', (e) => {
@@ -288,17 +338,13 @@ header{padding:28px 20px;text-align:left}
 .tag{max-width:1100px;margin:6px auto 0;padding:0 20px;opacity:0.9}
 
 .hero{display:flex;gap:20px;align-items:center;justify-content:center;max-width:1100px;margin:30px auto;padding:20px}
-.Software Maintenance-3d{width:480px;height:320px;border-radius:12px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.6);flex:0 0 480px}
+.laptop-3d{width:480px;height:320px;border-radius:12px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.6);flex:0 0 480px}
 .hero-text{max-width:520px;text-align:left}
 
 .categories{text-align:center;margin-top:20px}
 .buttons{display:flex;gap:18px;justify-content:center;flex-wrap:wrap}
 .cat-btn{padding:14px 26px;border-radius:10px;background:#003566;color:#fff;text-decoration:none;font-weight:600}
 .light-mode .cat-btn{background:#e9eef5;color:#000}
-.card:hover{
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(7, 88, 238, 0.5);
-}
 
 .products{max-width:1100px;margin:36px auto;padding:0 20px}
 .product-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:18px}
@@ -316,9 +362,13 @@ header{padding:28px 20px;text-align:left}
   justify-content: center;
   align-items: center;
   box-shadow: 0 6px 20px rgba(0,0,0,0.7);
-  margin: 20px auto; /* centers it under the 3D Software Maintenance */
+  margin: 20px auto; /* centers it under the 3D laptop */
   max-width:120px;
 }
+    .card-actions {
+  display: none;
+}
+
 
 .image-cube img {
   width: 100%;
@@ -493,15 +543,116 @@ footer{
 .search-input:focus {
   background: rgba(255, 255, 255, 0.28);
 }
+
+    /* ===============================
+   RESPONSIVE FIXES
+   =============================== */
+
+/* Tablets */
+@media (max-width: 1024px) {
+  header {
+    text-align: center;
+    padding: 20px 16px;
+  }
+
+  .logo {
+    font-size: 30px;
+  }
+
+  .search-wrapper {
+    position: static;
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .products {
+    padding: 0 16px;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}
+
+/* Mobile phones */
+@media (max-width: 600px) {
+
+  /* Header */
+  header {
+    text-align: center;
+  }
+
+  .logo {
+    font-size: 26px;
+  }
+
+  .tag {
+    font-size: 14px;
+  }
+
+  .back-btn {
+    margin: 10px auto;
+    display: block;
+  }
+
+  /* Search bar */
+  .search-input {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  /* Cards grid */
+  .product-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .card {
+    align-items: center;
+    text-align: center;
+  }
+
+  .card h3 {
+    font-size: 16px;
+  }
+
+  .desc {
+    font-size: 14px;
+  }
+
+  .price {
+    font-size: 15px;
+  }
+
+  .image-cube {
+    width: 100px;
+    height: 100px;
+    margin: 12px auto;
+  }
+
+  /* Popup responsive */
+  .popup-content {
+    width: 95%;
+    padding: 20px;
+  }
+
+  .popup-content > div {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .popup-img {
+    max-width: 220px;
+    margin: 0 auto;
+  }
+
+  .btn-open {
+    width: 100%;
+    font-size: 15px;
+  }
+}
+
 </style>
 
 </html>
-
-
-
-
-
-
-
-
-
