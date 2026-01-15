@@ -223,6 +223,28 @@ footer{
     max-width:280px;
   }
 }
+  .add-to-cart-wrapper{
+  margin-top:14px;
+  width:100%;
+}
+
+.add-to-cart-btn{
+  width:100%;
+  padding:14px;
+  font-size:16px;
+  font-weight:600;
+  border:none;
+  border-radius:10px;
+  background:var(--accent);
+  color:#fff;
+  cursor:pointer;
+  transition:0.25s;
+}
+
+.add-to-cart-btn:hover{
+  background:var(--dark-blue);
+}
+
 </style>
 </head>
 
@@ -368,26 +390,21 @@ window.onclick=e=>{if(e.target===popup)popup.style.display="none";}
 addToCartBtn.onclick = () => {
   const phone = "81972001";
 
-  const message = `
-Hello WhatTech,
+  const message =
+`Hello WhatTech,
 
 I am interested in the following product:
 
 Product: ${btn.dataset.title}
 Specs: ${btn.dataset.desc}
 Price: ${btn.dataset.price}
-Image: ${btn.dataset.img}
 
-Is this item available?
-`;
+Is this item available?`;
 
-  const whatsappURL =
-    "https://wa.me/" +
-    phone +
-    "?text=" +
-    encodeURIComponent(message);
-
-  window.open(whatsappURL, "_blank");
+  window.open(
+    "https://wa.me/" + phone + "?text=" + encodeURIComponent(message),
+    "_blank"
+  );
 };
 
 
@@ -398,6 +415,7 @@ Is this item available?
 
 </body>
 </html>
+
 
 
 
