@@ -1342,8 +1342,119 @@ footer{
 .search-input:focus {
   background: rgba(255, 255, 255, 0.28);
 }
+
+    /* ===============================
+   RESPONSIVE FIXES
+   =============================== */
+
+/* Tablets */
+@media (max-width: 1024px) {
+  header {
+    text-align: center;
+    padding: 20px 16px;
+  }
+
+  .logo {
+    font-size: 30px;
+  }
+
+  .search-wrapper {
+    position: static;
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .products {
+    padding: 0 16px;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}
+
+/* Mobile phones */
+@media (max-width: 600px) {
+
+  /* Header */
+  header {
+    text-align: center;
+  }
+
+  .logo {
+    font-size: 26px;
+  }
+
+  .tag {
+    font-size: 14px;
+  }
+
+  .back-btn {
+    margin: 10px auto;
+    display: block;
+  }
+
+  /* Search bar */
+  .search-input {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  /* Cards grid */
+  .product-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .card {
+    align-items: center;
+    text-align: center;
+  }
+
+  .card h3 {
+    font-size: 16px;
+  }
+
+  .desc {
+    font-size: 14px;
+  }
+
+  .price {
+    font-size: 15px;
+  }
+
+  .image-cube {
+    width: 100px;
+    height: 100px;
+    margin: 12px auto;
+  }
+
+  /* Popup responsive */
+  .popup-content {
+    width: 95%;
+    padding: 20px;
+  }
+
+  .popup-content > div {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .popup-img {
+    max-width: 220px;
+    margin: 0 auto;
+  }
+
+  .btn-open {
+    width: 100%;
+    font-size: 15px;
+  }
+}
+
 </style>
 
 </html>
+
 
 
