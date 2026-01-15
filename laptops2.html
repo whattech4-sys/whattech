@@ -31,15 +31,21 @@
         transform:translateY(0);
     }
 
-    /* Make popup close button smaller on mobile */
+/* Adjust popup image to fill space when close button is smaller on mobile */
 @media (max-width: 600px) {
   #closePopup {
     font-size: 18px;   /* smaller X */
-    width: 28px;       /* smaller button box */
+    width: 28px;       
     height: 28px;
     line-height: 28px;
-    top: 8px;          /* adjust position */
+    top: 8px;          
     right: 8px;
+  }
+
+  /* Make the image flex-grow to fill the remaining space */
+  .popup-content > div > div:first-child img {
+    width: 100%;      /* fill available horizontal space */
+    height: auto;     /* maintain aspect ratio */
   }
 }
 
@@ -1468,6 +1474,7 @@ footer{
 </style>
 
 </html>
+
 
 
 
