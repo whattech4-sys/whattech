@@ -364,48 +364,38 @@ const popupImg = document.getElementById("popupImg");
 const addToCartBtn = document.getElementById("addToCartBtn");
 const closePopup = document.getElementById("closePopup");
 
-let currentBtn = null;
+<script>
+const addToCartBtn = document.getElementById('addToCartBtn');
 
-document.querySelectorAll(".view-btn").forEach(btn=>{
-  btn.onclick = ()=>{
-    currentBtn = btn;
-
-    popupTitle.textContent = btn.dataset.title;
-    popupDesc.textContent = btn.dataset.desc;
-    popupPrice.textContent = btn.dataset.price;
-    popupImg.src = btn.dataset.img;
-
-    popup.style.display = "flex";
-  };
-});
-
-closePopup.onclick = ()=> popup.style.display="none";
-popup.onclick = e=>{ if(e.target===popup) popup.style.display="none"; };
-
-/* ADD TO CART WHATSAPP */
-addToCartBtn.onclick = ()=>{
+addToCartBtn.onclick = () => {
   const phone = "81972001";
 
-  const message =
-`Hello WhatTech,
+  const message = `
+Hello WhatTech,
 
 I am interested in the following product:
 
-Product: ${currentBtn.dataset.title}
-Specs: ${currentBtn.dataset.desc}
-Price: ${currentBtn.dataset.price}
+Product: ${titleEl.textContent}
+Specs: ${textEl.textContent}
+Price: ${priceEl.textContent}
+Image: ${imgEl.src}
 
-Is this item available?`;
+Is this item available?
+`;
 
-  window.open(
-    "https://wa.me/" + phone + "?text=" + encodeURIComponent(message),
-    "_blank"
-  );
+  const whatsappURL =
+    "https://wa.me/" +
+    phone +
+    "?text=" +
+    encodeURIComponent(message);
+
+  window.open(whatsappURL, "_blank");
 };
-
+</script>
 
 </script>
 
 </body>
 </html>
+
 
