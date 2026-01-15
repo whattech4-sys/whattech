@@ -223,27 +223,21 @@ footer{
     max-width:280px;
   }
 }
-  .add-to-cart-wrapper{
-  margin-top:14px;
-  width:100%;
+/* Button to open popup */
+.btn-open {
+  background: var(--accent);
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
 }
 
-.add-to-cart-btn{
-  width:100%;
-  padding:14px;
-  font-size:16px;
-  font-weight:600;
-  border:none;
-  border-radius:10px;
-  background:var(--accent);
-  color:#fff;
-  cursor:pointer;
-  transition:0.25s;
+.btn-open:hover {
+  background: var(--dark-blue);
 }
-
-.add-to-cart-btn:hover{
-  background:var(--dark-blue);
-}
+.cat-btn{padding:14px 26px;border-radius:10px;background:#003566;color:#fff;text-decoration:none;font-weight:600}
 
 </style>
 </head>
@@ -264,33 +258,21 @@ footer{
 </section>
 
 <section class="products">
-  <h2>Featured Products</h2>
+<h2>Featured Products</h2>
 
-  <div class="product-grid">
+<div class="product-grid">
 
-    <article class="card"
-      data-title="Acer Travel Mate"
-      data-desc="CORE I5 11TH • 8GB RAM • 256GB SSD"
-      data-price="$224.99"
-      data-img="https://i.ibb.co/605D9f0w/Acer-Travel-Mate.jpg">
-      <div class="image-cube">
-        <img src="https://i.ibb.co/605D9f0w/Acer-Travel-Mate.jpg">
-      </div>
-      <h3>Acer Travel Mate</h3>
-      <p class="price">$224.99</p>
-    </article>
-
-    <article class="card"
-      data-title="DELL 5310 2IN1"
-      data-desc="CORE I7 10TH • 16GB RAM • TOUCH"
-      data-price="$384.99"
-      data-img="https://i.ibb.co/Xrj2fw5z/DELL-5310-2-IN1.jpg">
-      <div class="image-cube">
-        <img src="https://i.ibb.co/Xrj2fw5z/DELL-5310-2-IN1.jpg">
-      </div>
-      <h3>DELL 5310 2IN1</h3>
-      <p class="price">$384.99</p>
-    </article>
+<article class="card"
+  data-title="Acer Travel Mate"
+  data-desc="CORE I5 11TH • 8GB RAM • 256GB SSD"
+  data-price="$224.99"
+  data-img="https://i.ibb.co/605D9f0w/Acer-Travel-Mate.jpg">
+  <div class="image-cube">
+    <img src="https://i.ibb.co/605D9f0w/Acer-Travel-Mate.jpg">
+  </div>
+  <h3>Acer Travel Mate</h3>
+  <p class="price">$224.99</p>
+</article>
 
     <article class="card"
       data-title="DELL 7390"
@@ -304,7 +286,20 @@ footer{
       <p class="price">$259.99</p>
     </article>
 
+
+<article class="card"
+  data-title="DELL 5310 2IN1"
+  data-desc="CORE I7 10TH • 16GB RAM • TOUCH"
+  data-price="$384.99"
+  data-img="https://i.ibb.co/Xrj2fw5z/DELL-5310-2-IN1.jpg">
+  <div class="image-cube">
+    <img src="https://i.ibb.co/Xrj2fw5z/DELL-5310-2-IN1.jpg">
   </div>
+  <h3>DELL 5310 2IN1</h3>
+  <p class="price">$384.99</p>
+</article>
+
+</div>
 </section>
 
 <section class="contactcontainer">
@@ -334,23 +329,25 @@ footer{
   </div>
 </section>
 
-<div class="popup" id="popup">
-  <div class="popup-content">
-    <span class="close" id="closePopup">&times;</span>
-    <div class="popup-flex">
-      <img id="popupImg" class="popup-img">
-      <div>
-        <h2 id="popupTitle"></h2>
-        <p id="popupText"></p>
-        <p id="popupPrice" class="price"></p>
-        <div class="add-to-cart-wrapper">
-  <button id="addToCartBtn" class="add-to-cart-btn">
-    Add to Cart
-  </button>
-</div>
 
-    </div>
-  </div>
+<!-- POPUP -->
+<div class="popup" id="popup">
+<div class="popup-content">
+<span class="close" id="closePopup">&times;</span>
+
+<div class="popup-flex">
+<img id="popupImg" class="popup-img">
+
+<div>
+<h2 id="popupTitle"></h2>
+<p id="popupText"></p>
+<p id="popupPrice" class="price"></p>
+
+<button class="btn-open" id="addToCartBtn">Add to Cart</button>
+</button>
+</div>
+</div>
+</div>
 </div>
 
 <footer>© 2026 WhatTech</footer>
@@ -358,44 +355,78 @@ footer{
 <script>
 const popup = document.getElementById("popup");
 const popupTitle = document.getElementById("popupTitle");
-const popupDesc = document.getElementById("popupDesc");
+const popupText = document.getElementById("popupText");
 const popupPrice = document.getElementById("popupPrice");
 const popupImg = document.getElementById("popupImg");
-const addToCartBtn = document.getElementById("addToCartBtn");
 const closePopup = document.getElementById("closePopup");
+const addToCartBtn = document.getElementById("addToCartBtn");
 
-<script>
-const addToCartBtn = document.getElementById('addToCartBtn');
+document.querySelectorAll(".card").forEach(card=>{
+  card.onclick = ()=>{
+    popupTitle.textContent = card.dataset.title;
+    popupText.textContent = card.dataset.desc;
+    popupPrice.textContent = card.dataset.price;
+    popupImg.src = card.dataset.img;
+    popup.style.display="flex";
+  }
+});
 
-addToCartBtn.onclick = () => {
-  const phone = "81972001";
+closePopup.onclick = ()=> popup.style.display="none";
 
+addToCartBtn.onclick = ()=>{
+  const phone = "96181972001";
   const message = `
 Hello WhatTech,
 
 I am interested in the following product:
 
-Product: ${titleEl.textContent}
-Specs: ${textEl.textContent}
-Price: ${priceEl.textContent}
-Image: ${imgEl.src}
+Product: ${popupTitle.textContent}
+Specs: ${popupText.textContent}
+Price: ${popupPrice.textContent}
+Image: ${popupImg.src}
 
 Is this item available?
 `;
 
-  const whatsappURL =
-    "https://wa.me/" +
-    phone +
-    "?text=" +
-    encodeURIComponent(message);
-
-  window.open(whatsappURL, "_blank");
+  window.open(
+    "https://wa.me/"+phone+"?text="+encodeURIComponent(message),
+    "_blank"
+  );
 };
-</script>
+
+  // keyboard: ESC to close
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && popup.style.display === 'flex') {
+      popup.style.display = 'none';
+      popup.setAttribute('aria-hidden','true');
+    }
+  });
+   // CLICK ANYWHERE ON CARD
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', () => openPopupFromCard(card));
+  });
+
+  // CLOSE POPUP
+  closeBtn.onclick = () => {
+    popup.style.display = 'none';
+    popup.setAttribute('aria-hidden','true');
+  };
+
+  window.onclick = e => {
+    if (e.target === popup) {
+      popup.style.display = 'none';
+      popup.setAttribute('aria-hidden','true');
+    }
+  };
+
+  window.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      popup.style.display = 'none';
+      popup.setAttribute('aria-hidden','true');
+    }
+  });
 
 </script>
 
 </body>
 </html>
-
-
