@@ -357,37 +357,34 @@ footer{
 
 <script>
 
-const popup=document.getElementById("popup");
-const closePopup=document.getElementById("closePopup");
-const popupTitle=document.getElementById("popupTitle");
-const popupText=document.getElementById("popupText");
-const popupPrice=document.getElementById("popupPrice");
-const popupImg=document.getElementById("popupImg");
+const popup = document.getElementById("popup");
+const popupTitle = document.getElementById("popupTitle");
+const popupDesc = document.getElementById("popupDesc");
+const popupPrice = document.getElementById("popupPrice");
+const popupImg = document.getElementById("popupImg");
+const addToCartBtn = document.getElementById("addToCartBtn");
+const closePopup = document.getElementById("closePopup");
 
-document.querySelectorAll(".card").forEach(card=>{
-  card.onclick=()=>{
-    popupTitle.textContent=card.dataset.title;
-    popupText.textContent=card.dataset.desc;
-    popupPrice.textContent=card.dataset.price;
-    popupImg.src=card.dataset.img;
-    popup.style.display="flex";
-  }
+let currentBtn = null;
+
+document.querySelectorAll(".view-btn").forEach(btn=>{
+  btn.onclick = ()=>{
+    currentBtn = btn;
+
+    popupTitle.textContent = btn.dataset.title;
+    popupDesc.textContent = btn.dataset.desc;
+    popupPrice.textContent = btn.dataset.price;
+    popupImg.src = btn.dataset.img;
+
+    popup.style.display = "flex";
+  };
 });
-closePopup.onclick=()=>popup.style.display="none";
-window.onclick=e=>{if(e.target===popup)popup.style.display="none";}
 
-  
-  // OPEN POPUP FROM CARD
-  function openPopupFromCard(card) {
-    const btn = card.querySelector('.view-btn');
-    if (!btn) return;
+closePopup.onclick = ()=> popup.style.display="none";
+popup.onclick = e=>{ if(e.target===popup) popup.style.display="none"; };
 
-    titleEl.textContent = btn.dataset.title || 'Product';
-    textEl.textContent  = btn.dataset.desc || '';
-    priceEl.textContent = btn.dataset.price || '';
-    imgEl.src           = btn.dataset.img || '';
-    imgEl.alt           = btn.dataset.title || 'Product';
-addToCartBtn.onclick = () => {
+/* ADD TO CART WHATSAPP */
+addToCartBtn.onclick = ()=>{
   const phone = "81972001";
 
   const message =
@@ -395,9 +392,9 @@ addToCartBtn.onclick = () => {
 
 I am interested in the following product:
 
-Product: ${btn.dataset.title}
-Specs: ${btn.dataset.desc}
-Price: ${btn.dataset.price}
+Product: ${currentBtn.dataset.title}
+Specs: ${currentBtn.dataset.desc}
+Price: ${currentBtn.dataset.price}
 
 Is this item available?`;
 
@@ -407,19 +404,7 @@ Is this item available?`;
   );
 };
 
-
-    popup.style.display = 'flex';
-    popup.setAttribute('aria-hidden','false');
-  }
 </script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
