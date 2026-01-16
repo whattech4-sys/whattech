@@ -12,13 +12,10 @@
   --dark-blue:#0758ee;
   --accent:#0077ff;
   --card:#0976eb;
+  --shadow:0 8px 24px rgba(0,0,0,.25);
 }
 
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
+*{box-sizing:border-box;margin:0;padding:0}
 
 body{
   font-family:Inter, Arial, sans-serif;
@@ -28,62 +25,30 @@ body{
 }
 
 /* ================= HEADER ================= */
-header{
-  padding:24px 16px;
-  text-align:center;
-}
-
-.logo{
-  font-size:clamp(26px,5vw,36px);
-  color:var(--accent);
-}
-
-.logo-blue{color:var(--accent)}
+header{text-align:center;padding:24px 16px}
+.logo{font-size:clamp(26px,5vw,36px);color:var(--accent)}
 .tag{opacity:.85;font-size:14px}
 
 /* ================= CATEGORIES ================= */
-.categories{
-  text-align:center;
-  padding:20px 16px;
-  font-size:;
-}
-
-.buttons{
-  display:flex;
-  justify-content:center;
-  gap:12px;
-  flex-wrap:wrap;
-}
-
+.categories{text-align:center;padding:20px 16px}
+.buttons{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
 .cat-btn{
-  padding:12px 22px;
+  padding:14px 26px;
   border-radius:10px;
   background:#003566;
   color:#fff;
   text-decoration:none;
   font-weight:600;
-  font-size:14px;
 }
 
 /* ================= PRODUCTS ================= */
-.products{
-  max-width:1200px;
-  margin:32px auto;
-  padding:0 16px;
-}
-
-.products h2{
-  text-align:center;
-  margin-bottom:20px;
-}
-
+.products{max-width:1200px;margin:32px auto;padding:0 16px}
 .product-grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
   gap:16px;
 }
 
-/* CARD */
 .card{
   background:var(--card);
   padding:16px;
@@ -92,35 +57,18 @@ header{
   transition:.3s;
   text-align:center;
 }
-
-.card:hover{
-  transform:translateY(-4px);
-  box-shadow:0 8px 18px rgba(0,0,0,.4);
-}
+.card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
 
 .image-cube{
-  width:100%;
   max-width:150px;
-  aspect-ratio:1/1;
+  aspect-ratio:1;
   margin:0 auto 10px;
   border-radius:14px;
   overflow:hidden;
 }
+.image-cube img{width:100%;height:100%;object-fit:cover}
 
-.image-cube img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-.card h3{
-  font-size:16px;
-}
-
-.price{
-  font-size:16px;
-  color:#ffd7d7;
-}
+.price{color:#ffd7d7}
 
 /* ================= POPUP ================= */
 .popup{
@@ -130,9 +78,8 @@ header{
   background:rgba(0,0,0,.6);
   justify-content:center;
   align-items:center;
-  z-index:1000;
+  z-index:10000;
 }
-
 .popup-content{
   background:var(--card);
   width:90%;
@@ -140,23 +87,9 @@ header{
   padding:20px;
   border-radius:14px;
 }
-
-.close{
-  font-size:26px;
-  float:right;
-  cursor:pointer;
-}
-
-.popup-flex{
-  display:flex;
-  gap:16px;
-  align-items:center;
-}
-
-.popup-img{
-  width:220px;
-  border-radius:10px;
-}
+.popup-flex{display:flex;gap:16px;align-items:center}
+.popup-img{width:220px;border-radius:10px}
+.close{font-size:26px;float:right;cursor:pointer}
 
 .btn-open{
   background:var(--accent);
@@ -167,7 +100,16 @@ header{
   cursor:pointer;
   width:100%;
   margin-top:10px;
-  font-size:14px;
+}
+
+/* ================= CONTACT ================= */
+.contactcontainer{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:16px;
+  padding:32px 16px;
+  text-align:center;
 }
 
 /* ================= CONTACT ================= */
@@ -213,41 +155,82 @@ footer{
   font-size:13px;
 }
 
+
+
+/* ================= CHATBOT ================= */
+#chat-widget-button{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  background:var(--accent);
+  color:#fff;
+  font-size:26px;
+  border:none;
+  cursor:pointer;
+  box-shadow:var(--shadow);
+  z-index:9998;
+}
+
+#chat-widget-container{
+  position:fixed;
+  bottom:100px;
+  right:20px;
+  width:400px;
+  height:600px;
+  background:#fff;
+  border-radius:14px;
+  overflow:hidden;
+  display:none;
+  box-shadow:var(--shadow);
+  z-index:9999;
+}
+
+#chat-widget-container.open{display:block}
+
+#chat-widget-iframe{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  border:none;
+}
+
+#chat-close-button{
+  position:absolute;
+  top:10px;
+  right:10px;
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  background:rgba(0,0,0,.6);
+  color:#fff;
+  border:none;
+  cursor:pointer;
+  z-index:10001;
+}
+
 /* ================= MOBILE ================= */
-@media (max-width:768px){
-  .popup-flex{
-    flex-direction:column;
-    text-align:center;
+@media(max-width:768px){
+  .popup-flex{flex-direction:column;text-align:center}
+  .popup-img{width:100%;max-width:280px}
+
+  #chat-widget-container{
+    width:calc(100vw - 30px);
+    height:calc(100vh - 120px);
+    right:15px;
+    bottom:80px;
   }
-
-  .popup-img{
-    width:100%;
-    max-width:280px;
-  }
 }
-/* Button to open popup */
-.btn-open {
-  background: var(--accent);
-  color: white;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.btn-open:hover {
-  background: var(--dark-blue);
-}
-.cat-btn{padding:14px 26px;border-radius:10px;background:#003566;color:#fff;text-decoration:none;font-weight:600}
-
 </style>
 </head>
 
 <body>
 
 <header>
-  <h1 class="logo"><span class="logo-blue">What</span>Tech</h1>
+  <h1 class="logo">WhatTech</h1>
   <p class="tag">Your Hub for Laptops & Tech Services</p>
 </header>
 
@@ -304,6 +287,9 @@ footer{
 </div>
 </section>
 
+</div>
+</section>
+    
 <section class="contactcontainer">
   <div class="contacttitle">
     <h2>Contact</h2><h2>Us</h2>
@@ -331,28 +317,35 @@ footer{
   </div>
 </section>
 
-
 <!-- POPUP -->
 <div class="popup" id="popup">
 <div class="popup-content">
 <span class="close" id="closePopup">&times;</span>
-
 <div class="popup-flex">
 <img id="popupImg" class="popup-img">
-
 <div>
 <h2 id="popupTitle"></h2>
 <p id="popupText"></p>
 <p id="popupPrice" class="price"></p>
-
 <button class="btn-open" id="addToCartBtn">Add to Cart</button>
-</button>
 </div>
 </div>
 </div>
 </div>
 
 <footer>© 2026 WhatTech</footer>
+
+<!-- CHATBOT -->
+<button id="chat-widget-button" onclick="toggleChat()">💬</button>
+
+<div id="chat-widget-container">
+<button id="chat-close-button" onclick="toggleChat()">×</button>
+<iframe
+  id="chat-widget-iframe"
+  src="https://ask-tech-wise.lovable.app"
+  allow="microphone; camera">
+</iframe>
+</div>
 
 <script>
 const popup = document.getElementById("popup");
@@ -395,41 +388,14 @@ Is this item available?
     "_blank"
   );
 };
+document.getElementById("closePopup").onclick=()=>popup.style.display="none";
 
-  // keyboard: ESC to close
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && popup.style.display === 'flex') {
-      popup.style.display = 'none';
-      popup.setAttribute('aria-hidden','true');
-    }
-  });
-   // CLICK ANYWHERE ON CARD
-  document.querySelectorAll('.card').forEach(card => {
-    card.addEventListener('click', () => openPopupFromCard(card));
-  });
-
-  // CLOSE POPUP
-  closeBtn.onclick = () => {
-    popup.style.display = 'none';
-    popup.setAttribute('aria-hidden','true');
-  };
-
-  window.onclick = e => {
-    if (e.target === popup) {
-      popup.style.display = 'none';
-      popup.setAttribute('aria-hidden','true');
-    }
-  };
-
-  window.addEventListener('keydown', e => {
-    if (e.key === 'Escape') {
-      popup.style.display = 'none';
-      popup.setAttribute('aria-hidden','true');
-    }
-  });
-
+function toggleChat(){
+  document.getElementById("chat-widget-container")
+    .classList.toggle("open");
+}
+    
 </script>
 
 </body>
 </html>
-
