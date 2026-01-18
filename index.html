@@ -346,8 +346,8 @@ footer{
   allow="microphone; camera">
 </iframe>
 </div>
+  <script>
 
-<script>
 const popup = document.getElementById("popup");
 const popupContent = document.querySelector(".popup-content");
 const popupTitle = document.getElementById("popupTitle");
@@ -356,15 +356,6 @@ const popupPrice = document.getElementById("popupPrice");
 const popupImg = document.getElementById("popupImg");
 const closePopup = document.getElementById("closePopup");
 const addToCartBtn = document.getElementById("addToCartBtn");
- 
-  
-  /*Esc key for quit card */
-  document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && popup.style.display === "flex") {
-    closePopupHandler();
-  }
-});
-
 
 /* OPEN POPUP */
 document.querySelectorAll(".card").forEach(card => {
@@ -373,53 +364,63 @@ document.querySelectorAll(".card").forEach(card => {
     popupText.textContent = card.dataset.desc;
     popupPrice.textContent = card.dataset.price;
     popupImg.src = card.dataset.img;
-    popup.style.display = "flex";
+    openPopup();
   });
 });
 
-/* CLOSE WITH X BUTTON */
-closePopup.addEventListener("click", () => {
-  popup.style.display = "none";
-});
+/* OPEN / CLOSE HELPERS */
+function openPopup(){
+  popup.classList.add("show");
+  document.body.style.overflow = "hidden";
+}
 
-/* CLOSE WHEN CLICKING ANYWHERE OUTSIDE THE CARD */
+function closePopupHandler(){
+  popup.classList.remove("show");
+  document.body.style.overflow = "";
+}
+
+/* CLOSE WITH X */
+closePopup.addEventListener("click", closePopupHandler);
+
+/* CLOSE WHEN CLICKING OUTSIDE */
 popup.addEventListener("click", (e) => {
   if (!popupContent.contains(e.target)) {
-    popup.style.display = "none";
+    closePopupHandler();
   }
 });
 
-/* ADD TO CART (WHATSAPP) */
+/* ESC KEY CLOSE */
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && popup.classList.contains("show")) {
+    closePopupHandler();
+  }
+});
+
+/* ADD TO CART */
 addToCartBtn.addEventListener("click", () => {
   const phone = "96181972001";
   const message = `
 Hello WhatTech,
 
-I am interested in the following product:
-
 Product: ${popupTitle.textContent}
 Specs: ${popupText.textContent}
 Price: ${popupPrice.textContent}
-Image: ${popupImg.src}
 
-Is this item available?
+Is this available?
   `;
-
   window.open(
     "https://wa.me/" + phone + "?text=" + encodeURIComponent(message),
     "_blank"
   );
 });
 
-/* CHAT WIDGET */
+/* CHAT */
 function toggleChat(){
-  document
-    .getElementById("chat-widget-container")
-    .classList.toggle("open");
+  document.getElementById("chat-widget-container").classList.toggle("open");
 }
 </script>
-
 </body>
 </html>
+
 
 
