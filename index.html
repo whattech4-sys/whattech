@@ -349,6 +349,7 @@ footer{
 
 <script>
 const popup = document.getElementById("popup");
+const popupContent = document.querySelector(".popup-content");
 const popupTitle = document.getElementById("popupTitle");
 const popupText = document.getElementById("popupText");
 const popupPrice = document.getElementById("popupPrice");
@@ -356,19 +357,31 @@ const popupImg = document.getElementById("popupImg");
 const closePopup = document.getElementById("closePopup");
 const addToCartBtn = document.getElementById("addToCartBtn");
 
-document.querySelectorAll(".card").forEach(card=>{
-  card.onclick = ()=>{
+/* OPEN POPUP */
+document.querySelectorAll(".card").forEach(card => {
+  card.addEventListener("click", () => {
     popupTitle.textContent = card.dataset.title;
     popupText.textContent = card.dataset.desc;
     popupPrice.textContent = card.dataset.price;
     popupImg.src = card.dataset.img;
-    popup.style.display="flex";
+    popup.style.display = "flex";
+  });
+});
+
+/* CLOSE WITH X BUTTON */
+closePopup.addEventListener("click", () => {
+  popup.style.display = "none";
+});
+
+/* CLOSE WHEN CLICKING ANYWHERE OUTSIDE THE CARD */
+popup.addEventListener("click", (e) => {
+  if (!popupContent.contains(e.target)) {
+    popup.style.display = "none";
   }
 });
 
-closePopup.onclick = ()=> popup.style.display="none";
-
-addToCartBtn.onclick = ()=>{
+/* ADD TO CART (WHATSAPP) */
+addToCartBtn.addEventListener("click", () => {
   const phone = "96181972001";
   const message = `
 Hello WhatTech,
@@ -381,21 +394,22 @@ Price: ${popupPrice.textContent}
 Image: ${popupImg.src}
 
 Is this item available?
-`;
+  `;
 
   window.open(
-    "https://wa.me/"+phone+"?text="+encodeURIComponent(message),
+    "https://wa.me/" + phone + "?text=" + encodeURIComponent(message),
     "_blank"
   );
-};
-document.getElementById("closePopup").onclick=()=>popup.style.display="none";
+});
 
+/* CHAT WIDGET */
 function toggleChat(){
-  document.getElementById("chat-widget-container")
+  document
+    .getElementById("chat-widget-container")
     .classList.toggle("open");
 }
-    
 </script>
 
 </body>
 </html>
+
