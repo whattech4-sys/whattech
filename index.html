@@ -356,6 +356,15 @@ const popupPrice = document.getElementById("popupPrice");
 const popupImg = document.getElementById("popupImg");
 const closePopup = document.getElementById("closePopup");
 const addToCartBtn = document.getElementById("addToCartBtn");
+ 
+  
+  /*Esc key for quit card */
+  document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && popup.style.display === "flex") {
+    closePopupHandler();
+  }
+});
+
 
 /* OPEN POPUP */
 document.querySelectorAll(".card").forEach(card => {
@@ -412,4 +421,5 @@ function toggleChat(){
 
 </body>
 </html>
+
 
