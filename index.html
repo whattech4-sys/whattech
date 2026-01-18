@@ -347,7 +347,6 @@ footer{
 </iframe>
 </div>
   <script>
-
 const popup = document.getElementById("popup");
 const popupContent = document.querySelector(".popup-content");
 const popupTitle = document.getElementById("popupTitle");
@@ -364,63 +363,54 @@ document.querySelectorAll(".card").forEach(card => {
     popupText.textContent = card.dataset.desc;
     popupPrice.textContent = card.dataset.price;
     popupImg.src = card.dataset.img;
-    openPopup();
+    popup.style.display = "flex";
   });
 });
 
-/* OPEN / CLOSE HELPERS */
-function openPopup(){
-  popup.classList.add("show");
-  document.body.style.overflow = "hidden";
-}
+/* CLOSE WITH X BUTTON */
+closePopup.addEventListener("click", () => {
+  popup.style.display = "none";
+});
 
-function closePopupHandler(){
-  popup.classList.remove("show");
-  document.body.style.overflow = "";
-}
-
-/* CLOSE WITH X */
-closePopup.addEventListener("click", closePopupHandler);
-
-/* CLOSE WHEN CLICKING OUTSIDE */
+/* CLOSE WHEN CLICKING ANYWHERE OUTSIDE THE CARD */
 popup.addEventListener("click", (e) => {
   if (!popupContent.contains(e.target)) {
-    closePopupHandler();
+    popup.style.display = "none";
   }
 });
 
-/* ESC KEY CLOSE */
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && popup.classList.contains("show")) {
-    closePopupHandler();
-  }
-});
-
-/* ADD TO CART */
+/* ADD TO CART (WHATSAPP) */
 addToCartBtn.addEventListener("click", () => {
   const phone = "96181972001";
   const message = `
 Hello WhatTech,
 
+I am interested in the following product:
+
 Product: ${popupTitle.textContent}
 Specs: ${popupText.textContent}
 Price: ${popupPrice.textContent}
+Image: ${popupImg.src}
 
-Is this available?
+Is this item available?
   `;
+
   window.open(
     "https://wa.me/" + phone + "?text=" + encodeURIComponent(message),
     "_blank"
   );
 });
 
-/* CHAT */
+/* CHAT WIDGET */
 function toggleChat(){
-  document.getElementById("chat-widget-container").classList.toggle("open");
+  document
+    .getElementById("chat-widget-container")
+    .classList.toggle("open");
 }
 </script>
 </body>
 </html>
+
 
 
 
