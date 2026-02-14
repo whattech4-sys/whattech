@@ -4,13 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WhatTech</title>
-<meta property="og:title"
- content="WhatTech" />
-<meta property="og:description"
- content="Your Hub for Laptops & Tech Services" />
-<meta property="og:image"
- content="https://i.ibb.co/wZtvpHLg/Logo-Whattech.png" />
- <meta property="og:type" content="website" />
+<meta property="og:title" content="WhatTech" />
+<meta property="og:description" content="Your Hub for Laptops & Tech Services" />
+<meta property="og:image" content="https://i.ibb.co/wZtvpHLg/Logo-Whattech.png" />
+<meta property="og:type" content="website" />
 
 <link rel="shortcut icon" href="https://i.ibb.co/wZtvpHLg/Logo-Whattech.png">
 
@@ -34,7 +31,13 @@ body{
 /* ================= HEADER ================= */
 header{text-align:center;padding:24px 16px}
 .logo{font-size:clamp(26px,5vw,36px);color:var(--accent)}
-.tag{opacity:.85;font-size:14px}
+.tag{opacity:.85;font-size:14px;margin:0}
+
+/* add space between "Sales | Maintenance | Installing Services"
+   and "Your Hub for Laptops & Tech Services" */
+header .tag + .tag{
+  margin-top: 10px; /* adjust spacing here */
+}
 
 /* ================= CATEGORIES ================= */
 .categories{text-align:center;padding:20px 16px}
@@ -119,16 +122,6 @@ header{text-align:center;padding:24px 16px}
   text-align:center;
 }
 
-/* ================= CONTACT ================= */
-.contactcontainer{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:16px;
-  padding:32px 16px;
-  text-align:center;
-}
-
 .contacttitle{
   display:flex;
   gap:8px;
@@ -161,8 +154,6 @@ footer{
   opacity:.8;
   font-size:13px;
 }
-
-
 
 /* ================= CHATBOT ================= */
 #chat-widget-button{
@@ -238,8 +229,8 @@ footer{
 
 <header>
   <h1 class="logo">WhatTech</h1>
-  <p class="tag">Sales | Maintenance | Installing Services</p> 
- <p class="tag">Your Hub for Laptops & Tech Services</p>
+  <p class="tag">Sales | Maintenance | Installing Services</p>
+  <p class="tag">Your Hub for Laptops & Tech Services</p>
 </header>
 
 <section class="categories">
@@ -251,87 +242,82 @@ footer{
 </section>
 
 <section class="products">
-<h2>Featured Products</h2>
+  <h2>Featured Products</h2>
 
-<div class="product-grid">
+  <div class="product-grid">
 
-<article class="card"
-  data-title="Acer Travel Mate"
-  data-desc="CORE I5 11TH • 8GB RAM • 256GB SSD"
-  data-price="$224.99"
-  data-img="https://i.ibb.co/0pNM17LD/Acer-Travel-Mate.jpg" alt="Acer-Travel-Mate" border="0">
-  <div class="image-cube">
-    <img src="https://i.ibb.co/0pNM17LD/Acer-Travel-Mate.jpg">
-  </div>
-  <h3>Acer Travel Mate</h3>
-  <p class="price">$224.99</p>
-</article>
+    <article class="card"
+      data-title="Acer Travel Mate"
+      data-desc="CORE I5 11TH • 8GB RAM • 256GB SSD"
+      data-price="$224.99"
+      data-img="https://i.ibb.co/0pNM17LD/Acer-Travel-Mate.jpg">
+      <div class="image-cube">
+        <img src="https://i.ibb.co/0pNM17LD/Acer-Travel-Mate.jpg" alt="Acer Travel Mate">
+      </div>
+      <h3>Acer Travel Mate</h3>
+      <p class="price">$224.99</p>
+    </article>
 
     <article class="card"
       data-title="DELL 7390"
       data-desc="CORE I7 12TH • 16GB RAM"
       data-price="$259.99"
-      data-img="https://i.ibb.co/gFzk6Dcp/51atf-Zy-Ouh-L-AC-UF894-1000-QL80.jpg" alt="51atf-Zy-Ouh-L-AC-UF894-1000-QL80" border="0">
+      data-img="https://i.ibb.co/gFzk6Dcp/51atf-Zy-Ouh-L-AC-UF894-1000-QL80.jpg">
       <div class="image-cube">
-        <img src="https://i.ibb.co/gFzk6Dcp/51atf-Zy-Ouh-L-AC-UF894-1000-QL80.jpg">
+        <img src="https://i.ibb.co/gFzk6Dcp/51atf-Zy-Ouh-L-AC-UF894-1000-QL80.jpg" alt="DELL 7390">
       </div>
       <h3>DELL 7390</h3>
       <p class="price">$259.99</p>
     </article>
 
+    <article class="card"
+      data-title="DELL 5310 2IN1"
+      data-desc="CORE I7 10TH • 16GB RAM • TOUCH"
+      data-price="$384.99"
+      data-img="https://i.ibb.co/Xrj2fw5z/DELL-5310-2-IN1.jpg">
+      <div class="image-cube">
+        <img src="https://i.ibb.co/Xrj2fw5z/DELL-5310-2-IN1.jpg" alt="DELL 5310 2IN1">
+      </div>
+      <h3>DELL 5310 2IN1</h3>
+      <p class="price">$384.99</p>
+    </article>
 
-<article class="card"
-  data-title="DELL 5310 2IN1"
-  data-desc="CORE I7 10TH • 16GB RAM • TOUCH"
-  data-price="$384.99"
-  data-img="https://i.ibb.co/Xrj2fw5z/DELL-5310-2-IN1.jpg">
-  <div class="image-cube">
-    <img src="https://i.ibb.co/Xrj2fw5z/DELL-5310-2-IN1.jpg">
   </div>
-  <h3>DELL 5310 2IN1</h3>
-  <p class="price">$384.99</p>
-</article>
-
-</div>
 </section>
 
-</div>
-</section>
-    
 <section class="contactcontainer">
   <div class="contacttitle">
     <h2>Contact</h2><h2>Us</h2>
   </div>
 
   <div class="contact">
-    <img src="https://i.ibb.co/9kK0H9g0/gmail.jpg" width="26">
+    <img src="https://i.ibb.co/9kK0H9g0/gmail.jpg" width="26" alt="Gmail">
     <a href="mailto:whattech4@gmail.com">whattech4@gmail.com</a>
   </div>
 
   <div class="emailAndPhone">
     <p>Customer Service + Maintenance
-      <a href="https://wa.me/+96178843719" target="_blank">
-         <img src="https://i.ibb.co/k6vD6pyT/Screenshot-2-12-2025-225619-www-bing-com.jpg" alt="Screenshot-2-12-2025-225619-www-bing-com" border="0" width="30px" height="30px"></a>
-     
+      <a href="https://wa.me/+96178843719" target="_blank" rel="noopener">
+        <img src="https://i.ibb.co/k6vD6pyT/Screenshot-2-12-2025-225619-www-bing-com.jpg" alt="WhatsApp" border="0" width="30" height="30">
+      </a>
     </p>
   </div>
-
 </section>
 
 <!-- POPUP -->
 <div class="popup" id="popup">
-<div class="popup-content">
-<span class="close" id="closePopup">&times;</span>
-<div class="popup-flex">
-<img id="popupImg" class="popup-img">
-<div>
-<h2 id="popupTitle"></h2>
-<p id="popupText"></p>
-<p id="popupPrice" class="price"></p>
-<button class="btn-open" id="addToCartBtn">Add to Cart</button>
-</div>
-</div>
-</div>
+  <div class="popup-content">
+    <span class="close" id="closePopup">&times;</span>
+    <div class="popup-flex">
+      <img id="popupImg" class="popup-img" alt="Product image">
+      <div>
+        <h2 id="popupTitle"></h2>
+        <p id="popupText"></p>
+        <p id="popupPrice" class="price"></p>
+        <button class="btn-open" id="addToCartBtn">Add to Cart</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <footer>© 2026 WhatTech</footer>
@@ -340,14 +326,15 @@ footer{
 <button id="chat-widget-button" onclick="toggleChat()">💬</button>
 
 <div id="chat-widget-container">
-<button id="chat-close-button" onclick="toggleChat()">×</button>
-<iframe
-  id="chat-widget-iframe"
-  src="https://ask-tech-wise.lovable.app"
-  allow="microphone; camera">
-</iframe>
+  <button id="chat-close-button" onclick="toggleChat()">×</button>
+  <iframe
+    id="chat-widget-iframe"
+    src="https://ask-tech-wise.lovable.app"
+    allow="microphone; camera">
+  </iframe>
 </div>
-  <script>
+
+<script>
 const popup = document.getElementById("popup");
 const popupContent = document.querySelector(".popup-content");
 const popupTitle = document.getElementById("popupTitle");
@@ -404,19 +391,8 @@ Is this item available?
 
 /* CHAT WIDGET */
 function toggleChat(){
-  document
-    .getElementById("chat-widget-container")
-    .classList.toggle("open");
+  document.getElementById("chat-widget-container").classList.toggle("open");
 }
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
