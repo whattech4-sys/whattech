@@ -1,181 +1,312 @@
 <!DOCTYPE html>
-<script>
-(function(){
-    function isHex(h){ return /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test((h||'').trim()); }
-    function to6(h){ h = h.replace('#',''); if (h.length===3) h = h.split('').map(c=>c+c).join(''); return h; }
-    function shadeHex(hex, percent){
-        hex = to6(hex);
-        const num = parseInt(hex,16);
-        let r = (num >> 16) & 0xFF;
-        let g = (num >> 8) & 0xFF;
-        let b = num & 0xFF;
-        r = Math.round(r * (100 + percent) / 100);
-        g = Math.round(g * (100 + percent) / 100);
-        b = Math.round(b * (100 + percent) / 100);
-        r = Math.max(0, Math.min(255, r));
-        g = Math.max(0, Math.min(255, g));
-        b = Math.max(0, Math.min(255, b));
-        return '#' + ((1<<24) + (r<<16) + (g<<8) + b).toString(16).slice(1);
-
-         nsdc 
-        mbytesa
-        
-    }
-
-   
-})();c
-</script>
-<style>
-    
-.card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
-    .card:active {
-        transform:translateY(0);
-    }
-
-/* Adjust popup image to fill space when close button is smaller on mobile */
-@media (max-width: 600px) {
-  #closePopup {
-    font-size: 18px;   /* smaller X */
-    width: 28px;       
-    height: 28px;
-    line-height: 28px;
-    top: 8px;          
-    right: 8px;
-      dfgsjhcg 
-      dcjhvbsd 
-      chjgsd 
-      dbcv sd
-      sxjbsa casdmclkasndc s
-      bd jndcv SD
-      vbs dskc x c
-      dscmnbdc vsxdvma
-      x asjdhbaslkfsad
-      
-  }
-
-  /* Make the image flex-grow to fill the remaining space */
-  .popup-content > div > div:first-child img {
-    width: 100%;      /* fill available horizontal space */
-    height: auto;     /* maintain aspect ratio */
-  }
-}
-
-
-</style>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Laptops - WhatTech</title>
-    
-<link rel="shortcut icon" href="https://i.ibb.co/wZtvpHLg/Logo-Whattech.png">
 
+  <link rel="shortcut icon" href="https://i.ibb.co/wZtvpHLg/Logo-Whattech.png">
   <link rel="stylesheet" href="style.css" />
-   <!-- 🔍 SEARCH BAR (Top Right Corner) -->
-<div class="search-wrapper">
-  <input 
-    id="searchInput"
-    type="text"
-    class="search-input"
-    placeholder="Search..."
-  />
-</div>
+
+  <style>
+    :root{
+      --dark-blue:#0758ee;
+      --accent:#0077ff;
+      --card:#0976eb;
+      --shadow: 0 10px 25px rgba(0,0,0,0.35);
+    }
+
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter, Arial, sans-serif;transition:background 0.35s,color 0.35s}
+
+    /* DARK MODE */
+    .dark-mode{background:linear-gradient(180deg,#000000, var(--dark-blue));color:#fff}
+
+    header{padding:28px 20px;text-align:left; position:relative;}
+    .logo{font-size:36px;margin:0}
+    .logo-blue{color:var(--accent)}
+    .tag{max-width:1100px;margin:6px auto 0;padding:0 20px;opacity:0.9}
+
+    .back-btn {
+      background: transparent;
+      color: #fff;
+      border: 2px solid #fff;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: 0.25s ease;
+    }
+    .back-btn:hover { background: #ffffff22; }
+
+    /* SEARCH BAR (TOP RIGHT CORNER) */
+    .search-wrapper {
+      position: absolute;
+      top: 25px;
+      right: 25px;
+      z-index: 10;
+    }
+    .search-input {
+      width: 220px;
+      padding: 10px 14px;
+      border: none;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(5px);
+      color: white;
+      font-size: 15px;
+      outline: none;
+      transition: 0.25s ease;
+    }
+    .search-input::placeholder { color: #eeeeee; }
+    .search-input:focus { background: rgba(255, 255, 255, 0.28); }
+
+    .products{max-width:1100px;margin:36px auto;padding:0 20px}
+    .product-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:18px}
+
+    .card{
+      background:var(--card);
+      padding:16px;
+      border-radius:12px;
+      color:#fff;
+      min-height:160px;
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+      justify-content:space-between;
+      cursor:pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      user-select:none;
+    }
+    .card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+    .card:active{transform:translateY(0)}
+
+    .card h3{margin:8px 0 6px;}
+    .desc{margin:0 0 8px;opacity:0.95}
+    .price{margin:0 0 8px;font-weight:700}
+
+    .image-cube {
+      width: 120px;
+      height: 120px;
+      background: #003566;
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.7);
+      margin: 12px auto 10px;
+      max-width:120px;
+    }
+    .image-cube img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Hide actions (we still keep the .view-btn for data attributes) */
+    .card-actions { display:none; }
+
+    /* Popup background */
+    .popup {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 18px;
+    }
+
+    /* Popup box */
+    .popup-content {
+      background: var(--card);
+      padding: 30px;
+      border-radius: 14px;
+      width: 750px;
+      max-width: 100%;
+      color: white;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.45);
+      animation: fadeIn 0.25s ease-in-out;
+      position: relative;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    /* Close button */
+    #closePopup.close {
+      position:absolute;
+      top: 12px;
+      right: 12px;
+      width: 34px;
+      height: 34px;
+      border:none;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.14);
+      color:#fff;
+      font-size: 22px;
+      line-height: 34px;
+      cursor:pointer;
+    }
+    #closePopup.close:hover { background: rgba(255,255,255,0.22); }
+
+    .popup-img {
+      width: 100%;
+      border-radius: 8px;
+      display:block;
+    }
+
+    .btn-open {
+      background: var(--accent);
+      color: white;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .btn-open:hover { background: var(--dark-blue); }
+
+    footer{
+      color:#eeeeee;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    /* Tablets */
+    @media (max-width: 1024px) {
+      header { text-align:center; padding: 20px 16px; }
+      .logo { font-size: 30px; }
+      .search-wrapper { position: static; margin-top: 15px; display:flex; justify-content:center; }
+      .products { padding: 0 16px; }
+      .product-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+    }
+
+    /* Mobile phones */
+    @media (max-width: 600px) {
+      header { text-align:center; }
+      .logo { font-size: 26px; }
+      .tag { font-size: 14px; }
+      .back-btn { margin: 10px auto; display: block; }
+
+      .search-input { width: 100%; max-width: 300px; }
+
+      .product-grid { grid-template-columns: 1fr; gap: 16px; }
+      .card { align-items: center; text-align: center; }
+      .card h3 { font-size: 16px; }
+      .desc { font-size: 14px; }
+      .price { font-size: 15px; }
+
+      .image-cube { width: 100px; height: 100px; margin: 12px auto; }
+
+      .popup-content { width: 100%; padding: 18px; }
+      .popup-layout { flex-direction: column; gap: 16px; }
+      .popup-left { flex: 0 0 auto !important; }
+      .btn-open { width: 100%; font-size: 15px; }
+
+      #closePopup.close {
+        font-size: 18px;
+        width: 28px;
+        height: 28px;
+        line-height: 28px;
+        top: 8px;
+        right: 8px;
+        border-radius: 8px;
+      }
+    }
+  </style>
 </head>
 
 <body class="dark-mode">
+  <header>
+    <h1 class="logo"><span class="logo-blue">What</span>Tech</h1>
 
-<header>
-  <h1 class="logo"><span class="logo-blue">What</span>Tech</h1>
+    <button type="button" onclick="history.back()" class="back-btn">← Back</button>
 
-  <!-- BACK BUTTON -->
- 
- 
+    <p class="tag">Laptop Collection</p>
 
+    <div class="search-wrapper">
+      <input
+        id="searchInput"
+        type="text"
+        class="search-input"
+        placeholder="Search..."
+        autocomplete="off"
+      />
+    </div>
+  </header>
 
-<section class="products">
-  <h2>All Laptops</h2>
+  <section class="products">
+    <h2>All Laptops</h2>
 
-  <!-- Laptop Cards Grid -->
-  <div class="product-grid" id="laptopGrid">
+    <div class="product-grid" id="laptopGrid">
 
+      <!-- CARD 2 -->
+      <article class="card">
+        <div class="image-cube">
+          <img src="https://i.ibb.co/bMqdbxJD/Acer-Swift.jpg" alt="Acer Swift">
+        </div>
+        <h3>ACER SWIFT</h3>
+        <p class="desc">CORE I7 11TH - 8 GB 512GB</p>
+        <p class="price">$339.99</p>
+        <div class="card-actions">
+          <button
+            class="btn view-btn"
+            data-title="Acer Swift"
+            data-desc="CORE I7 11TH - 8 GB 512GB"
+            data-price="$339.99"
+            data-img="https://i.ibb.co/bMqdbxJD/Acer-Swift.jpg"
+            type="button"
+          >View</button>
+        </div>
+      </article>
 
+      <!-- CARD 3 -->
+      <article class="card">
+        <div class="image-cube">
+          <img src="https://i.ibb.co/TxHzpHbt/ACER-TRAVEL-MATE.jpg" alt="Acer Travel Mate">
+        </div>
+        <h3>Acer Travel Mate</h3>
+        <p class="desc">CORE I5 11TH 8GB 256</p>
+        <p class="price">$299.99</p>
+        <div class="card-actions">
+          <button
+            class="btn view-btn"
+            data-title="Acer Travel Mate"
+            data-desc="CORE I5 11TH 8GB 256"
+            data-price="$299.99"
+            data-img="https://i.ibb.co/TxHzpHbt/ACER-TRAVEL-MATE.jpg"
+            type="button"
+          >View</button>
+        </div>
+      </article>
 
-    <!-- CARD 2 -->
-    <article class="card">
-      <div class="image-cube">
-       <img src="https://i.ibb.co/bMqdbxJD/Acer-Swift.jpg" alt="Acer-Swift" border="0">
-      </div>
-      <h3>ACER SWIFT</h3>
-      <p class="desc">CORE I7 11TH - 8 GB 512GB</p>
-      <p class="price">$339.99</p>
-      <div class="card-actions">
-        <button
-          class="btn view-btn"
-          data-title="Acer Swift"
-          data-desc="CORE I7 11TH - 8 GB 512GB"
-          data-price="$339.99"
-          data-img="https://i.ibb.co/bMqdbxJD/Acer-Swift.jpg"
-        >View</button>
-      </div>
-    </article>
-
-    <!-- CARD 3 -->
-    <article class="card">
-      <div class="image-cube">
-     <img src="https://i.ibb.co/TxHzpHbt/ACER-TRAVEL-MATE.jpg" alt="ACER-TRAVEL-MATE" border="0"></a>
-      </div>
-      <h3>Acer Travel Mate</h3>
-      <p class="desc">CORE I5 11TH 8GB 256</p>
-      <p class="price">$299.99</p>
-      <div class="card-actions">
-        <button
-          class="btn view-btn"
-          data-title="Acer Travel Mate"
-          data-desc="CORE I5 11TH 8GB 256"
-          data-price="$299.99"
-          data-img="https://i.ibb.co/TxHzpHbt/ACER-TRAVEL-MATE.jpg"
-        >View</button>
-      </div>
-    </article>
-
-     <!-- CARD 4-->
-    <article class="card">
-      <div class="image-cube">
-        <img src="https://i.ibb.co/Wpd0H3QQ/ASUS-TUF-A15-FA506-N.jpg" alt="ASUS-TUF-A15-FA506-N" border="0"></a>
-      </div>
-      <h3>ASUS TUF A15 FA506N</h3>
-      <p class="desc">AMD R57535HS RTX 3050 16GB - 512 open box</p>
-      <p class="price">$699.99</p>
-      <div class="card-actions">
-        <button
-          class="btn view-btn"
-          data-title="ASUS TUF A15 FA506N"
-          data-desc="AMD R57535HS RTX 3050 16GB - 512 open box"
-          data-price="$699.99"
-          data-img="https://i.ibb.co/Wpd0H3QQ/ASUS-TUF-A15-FA506-N.jpg"
-        >View</button>
-      </div>
-    </article>
-
-     <!-- CARD 5 -->
-    <article class="card">
-      <div class="image-cube">
-<img src="https://i.ibb.co/Cpv9nqF6/DELL-7480.jpg" alt="DELL-7480" border="0"></a>
-      </div>
-      <h3>Dell 7480</h3>
-      <p class="desc">CORE i7 - 6th Generation - 8 GB RAM - 256 GB NVME</p>
-      <p class="price">$219.99</p>
-      <div class="card-actions">
-        <button
-          class="btn view-btn"
-          data-title="DELL 7480"
-          data-desc="Core i7 - 6th Generation - 8 GB RAM - 256 GB NVME"
-          data-price="$219.99"
-          data-img="https://i.ibb.co/Cpv9nqF6/DELL-7480.jpg"
-        >View</button>
-      </div>
-    </article>
+      <!-- CARD 4 -->
+      <article class="card">
+        <div class="image-cube">
+          <img src="https://i.ibb.co/Wpd0H3QQ/ASUS-TUF-A15-FA506-N.jpg" alt="ASUS TUF A15 FA506N">
+        </div>
+        <h3>ASUS TUF A15 FA506N</h3>
+        <p class="desc">AMD R57535HS RTX 3050 16GB - 512 open box</p>
+        <p class="price">$699.99</p>
+        <div class="card-actions">
+          <button
+            class="btn view-btn"
+            data-title="ASUS TUF A15 FA506N"
+            data-desc="AMD R57535HS RTX 3050 16GB - 512 open box"
+            data-price="$699.99"
+            data-img="https://i.ibb.co/Wpd0H3QQ/ASUS-TUF-A15-FA506-N.jpg"
+            type="button"
+          >View</button>
+        </div>
+      </article>
+        
+       
 
      <!-- CARD 6-->
     <article class="card">
@@ -985,502 +1116,152 @@
       </div>
     </article>
 
+      <!-- ✅ Keep adding your other cards exactly like above.
+           Tip: each card MUST have a .view-btn with data-title/data-desc/data-price/data-img. -->
 
-    <!-- You can duplicate a card block above to add more laptops -->
- </div>
-</section>
+    </div>
+  </section>
 
-<!-- Popup Window (same theme as your home popup) -->
-<div id="popup" class="popup" aria-hidden="true" role="dialog" aria-modal="true">
-  <div class="popup-content" role="document">
-    <button id="closePopup" class="close" aria-label="Close popup">&times;</button>
+  <!-- Popup -->
+  <div id="popup" class="popup" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="popup-content" role="document">
+      <button id="closePopup" class="close" aria-label="Close popup" type="button">&times;</button>
 
-    <div style="display:flex;gap:20px;align-items:flex-start;">
-      <!-- Left: Image -->
-      <div style="flex:0 0 240px;">
-        <img id="popupImg" src="" alt="Product image" class="popup-img" style="width:100%;height:auto;border-radius:8px;">
-      </div>
+      <div class="popup-layout" style="display:flex;gap:20px;align-items:flex-start;">
+        <!-- Left: Image -->
+        <div class="popup-left" style="flex:0 0 240px;">
+          <img id="popupImg" src="" alt="Product image" class="popup-img">
+        </div>
 
-      <!-- Right: Details -->
-      <div style="flex:1;">
-        <h2 id="popupTitle" class="popup-title" style="margin-top:0;">Product Title</h2>
-        <p id="popupText" class="popup-text" style="margin:8px 0 12px;opacity:0.95;"></p>
-        <p id="popupPrice" class="price" style="font-size:20px;margin-bottom:14px;color:#ffd7d7;"></p>
+        <!-- Right: Details -->
+        <div style="flex:1;">
+          <h2 id="popupTitle" class="popup-title" style="margin-top:0;">Product Title</h2>
+          <p id="popupText" class="popup-text" style="margin:8px 0 12px;opacity:0.95;"></p>
+          <p id="popupPrice" class="price" style="font-size:20px;margin-bottom:14px;color:#ffd7d7;"></p>
 
-        <div style="display:flex;gap:12px;align-items:center;">
-<button class="btn-open" id="addToCartBtn">Add to Cart</button>
-
+          <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+            <button class="btn-open" id="addToCartBtn" type="button">Add to Cart</button>
+          </div>
         </div>
       </div>
+
     </div>
   </div>
-</div>
 
-<br><br>
-<footer>
-  <p>© <span id="year"></span> WhatTech</p>
-</footer>
+  <footer>
+    <p>© <span id="year"></span> WhatTech</p>
+  </footer>
 
-<script>
-  // year
-  document.getElementById('year').textContent = new Date().getFullYear();
+  <script>
+    // --- helpers (optional) ---
+    function isHex(h){ return /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test((h||'').trim()); }
+    function to6(h){ h = (h||'').replace('#',''); if (h.length===3) h = h.split('').map(c=>c+c).join(''); return h; }
+    function shadeHex(hex, percent){
+      if (!isHex(hex)) return hex;
+      hex = to6(hex);
+      const num = parseInt(hex,16);
+      let r = (num >> 16) & 0xFF;
+      let g = (num >> 8) & 0xFF;
+      let b = num & 0xFF;
+      r = Math.round(r * (100 + percent) / 100);
+      g = Math.round(g * (100 + percent) / 100);
+      b = Math.round(b * (100 + percent) / 100);
+      r = Math.max(0, Math.min(255, r));
+      g = Math.max(0, Math.min(255, g));
+      b = Math.max(0, Math.min(255, b));
+      return '#' + ((1<<24) + (r<<16) + (g<<8) + b).toString(16).slice(1);
+    }
 
-  const popup = document.getElementById('popup');
-  const closeBtn = document.getElementById('closePopup');
-  const titleEl = document.getElementById('popupTitle');
-  const textEl = document.getElementById('popupText');
-  const priceEl = document.getElementById('popupPrice');
-  const imgEl = document.getElementById('popupImg');
-  const addToCartBtn = document.getElementById('addToCartBtn');
+    document.addEventListener("DOMContentLoaded", () => {
+      // year
+      document.getElementById('year').textContent = new Date().getFullYear();
 
-  // OPEN POPUP FROM CARD
-  function openPopupFromCard(card) {
-    const btn = card.querySelector('.view-btn');
-    if (!btn) return;
+      const popup = document.getElementById('popup');
+      const closeBtn = document.getElementById('closePopup');
+      const titleEl = document.getElementById('popupTitle');
+      const textEl  = document.getElementById('popupText');
+      const priceEl = document.getElementById('popupPrice');
+      const imgEl   = document.getElementById('popupImg');
+      const addToCartBtn = document.getElementById('addToCartBtn');
 
-    titleEl.textContent = btn.dataset.title || 'Product';
-    textEl.textContent  = btn.dataset.desc || '';
-    priceEl.textContent = btn.dataset.price || '';
-    imgEl.src           = btn.dataset.img || '';
-    imgEl.alt           = btn.dataset.title || 'Product';
-addToCartBtn.onclick = () => {
-  const phone = "78843719";
+      function openPopupFromCard(card) {
+        const btn = card.querySelector('.view-btn');
+        if (!btn) return;
 
-  const message = 
-Hello WhatTech,
+        titleEl.textContent = btn.dataset.title || 'Product';
+        textEl.textContent  = btn.dataset.desc || '';
+        priceEl.textContent = btn.dataset.price || '';
+        imgEl.src           = btn.dataset.img || '';
+        imgEl.alt           = btn.dataset.title || 'Product';
+
+        addToCartBtn.onclick = () => {
+          const phone = "78843719";
+
+          const message = `Hello WhatTech,
 
 I am interested in the following product:
 
-Product: ${btn.dataset.title}
-Specs: ${btn.dataset.desc}
-Price: ${btn.dataset.price}
-Image: ${btn.dataset.img}
+Product: ${btn.dataset.title || ""}
+Specs: ${btn.dataset.desc || ""}
+Price: ${btn.dataset.price || ""}
+Image: ${btn.dataset.img || ""}
 
-Is this item available?
-;
+Is this item available?`;
 
-  const whatsappURL =
-    "https://wa.me/" +
-    phone +
-    "?text=" +
-    encodeURIComponent(message);
+          const whatsappURL = "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
+          window.open(whatsappURL, "_blank", "noopener,noreferrer");
+        };
 
-  window.open(whatsappURL, "_blank");
-};
+        popup.style.display = 'flex';
+        popup.setAttribute('aria-hidden','false');
+      }
 
+      function closePopup() {
+        popup.style.display = 'none';
+        popup.setAttribute('aria-hidden','true');
+      }
 
-    popup.style.display = 'flex';
-    popup.setAttribute('aria-hidden','false');
-  }
+      // CLICK ANYWHERE ON CARD
+      document.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('click', (e) => {
+          // if in the future you show buttons/links inside the card, ignore their click:
+          const interactive = e.target.closest('button, a, input, textarea, select, label');
+          if (interactive) return;
 
-  // CLICK ANYWHERE ON CARD
-  document.querySelectorAll('.card').forEach(card => {
-    card.addEventListener('click', () => openPopupFromCard(card));
-  });
+          openPopupFromCard(card);
+        });
+      });
 
-  // CLOSE POPUP
-  closeBtn.onclick = () => {
-    popup.style.display = 'none';
-    popup.setAttribute('aria-hidden','true');
-  };
+      // CLOSE POPUP
+      closeBtn.addEventListener('click', closePopup);
 
-  window.onclick = e => {
-    if (e.target === popup) {
-      popup.style.display = 'none';
-      popup.setAttribute('aria-hidden','true');
-    }
-  };
+      // close when clicking outside popup-content
+      popup.addEventListener('click', (e) => {
+        if (e.target === popup) closePopup();
+      });
 
-  window.addEventListener('keydown', e => {
-    if (e.key === 'Escape') {
-      popup.style.display = 'none';
-      popup.setAttribute('aria-hidden','true');
-    }
-  });
-</script>
-<script>
+      // keyboard ESC
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && popup.style.display === 'flex') closePopup();
+      });
 
-  // keyboard: ESC to close
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && popup.style.display === 'flex') {
-      popup.style.display = 'none';
-      popup.setAttribute('aria-hidden','true');
-    }
-  });
-</script>
-<script>
-// --- SEARCH FUNCTION ---
-const searchInput = document.getElementById("searchInput");
-const cards = document.querySelectorAll(".card");
+      // --- SEARCH FUNCTION ---
+      const searchInput = document.getElementById("searchInput");
 
-searchInput.addEventListener("keyup", function () {
-    const query = searchInput.value.toLowerCase();
+      function filterCards() {
+        const query = (searchInput.value || "").toLowerCase().trim();
+        document.querySelectorAll(".card").forEach(card => {
+          const title = (card.querySelector("h3")?.textContent || "").toLowerCase();
+          const desc  = (card.querySelector(".desc")?.textContent || "").toLowerCase();
+          const price = (card.querySelector(".price")?.textContent || "").toLowerCase();
 
-    cards.forEach(card => {
-        const title = card.querySelector("h3").textContent.toLowerCase();
-        const desc = card.querySelector(".desc").textContent.toLowerCase();
-        const price = card.querySelector(".price").textContent.toLowerCase();
+          const match = !query || title.includes(query) || desc.includes(query) || price.includes(query);
+          card.style.display = match ? "flex" : "none";
+        });
+      }
 
-        // Show or hide card depending on search
-        if (
-            title.includes(query) ||
-            desc.includes(query) ||
-            price.includes(query)
-        ) {
-            card.style.display = "flex";
-        } else {
-            card.style.display = "none";
-        }
+      searchInput.addEventListener("input", filterCards);
     });
-});
-
-</script>
-
-
+  </script>
 </body>
-<style>:root{
-  --dark-blue:#0758ee;
-  --accent:#0077ff;
-  --card:#0976eb;
-}
-
-*{box-sizing:border-box}
-body{margin:0;font-family:Inter, Arial, sans-serif;transition:background 0.35s,color 0.35s}
-
-/* DARK MODE */
-.dark-mode{background:linear-gradient(180deg,#000000, var(--dark-blue));color:#fff}
-
-/* LIGHT MODE */
-.light-mode{background:#ffffff;color:#031017}
-
-/* Toggle */
-.mode-toggle{position:fixed;top:14px;right:14px;background:#003566;color:#fff;border:none;padding:8px 10px;border-radius:8px;cursor:pointer;z-index:50}
-.light-mode .mode-toggle{background:#222;color:#fff}
-
-header{padding:28px 20px;text-align:left}
-.logo-row{display:flex;align-items:center;justify-content:space-between;max-width:1100px;margin:0 auto}
-.logo{font-size:36px;margin:0}
-.logo-blue{color:var(--accent)}
-.admin-link{text-decoration:none;font-size:18px;margin-left:12px}
-.tag{max-width:1100px;margin:6px auto 0;padding:0 20px;opacity:0.9}
-
-.hero{display:flex;gap:20px;align-items:center;justify-content:center;max-width:1100px;margin:30px auto;padding:20px}
-.laptop-3d{width:480px;height:320px;border-radius:12px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.6);flex:0 0 480px}
-.hero-text{max-width:520px;text-align:left}
-
-.categories{text-align:center;margin-top:20px}
-.buttons{display:flex;gap:18px;justify-content:center;flex-wrap:wrap}
-.cat-btn{padding:14px 26px;border-radius:10px;background:#003566;color:#fff;text-decoration:none;font-weight:600}
-.light-mode .cat-btn{background:#e9eef5;color:#000}
-
-.products{max-width:1100px;margin:36px auto;padding:0 20px}
-.product-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:18px}
-.card{background:var(--card);padding:16px;border-radius:12px;color:#fff;min-height:160px;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between}
-.card-icon{font-size:34px}
-.card h3{margin:8px;}
-
-.image-cube {
-  width: 120px;
-  height: 120px;
-  background: #003566;
-  border-radius: 14px;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.7);
-  margin: 20px auto; /* centers it under the 3D laptop */
-  max-width:120px;
-}
-    .card-actions {
-  display: none;
-}
-
-
-.image-cube img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.contactcontainer{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content: center;
-    gap:1rem;
-    margin: 2rem auto;
-    max-width: 2000px;
-}
-.contacttitle{
-    display:flex;
-    align-items:center;
-    justify-content: center;
-    gap: 1rem;
-    margin-bottom: 10px;
-    font-size: 1rem;
-}
-.contact{
-    display:flex;
-    align-items: left;
-    justify-content: left;
-    margin-right: 5rem;
-    gap: 1rem;
-}
-.contact h3, .contact a{
-    color:#eeeeee;
-    text-decoration: none;
-    justify-content: left;
-}
-.emailAndPhone{
-    display:flexbox;
-    align-items: left;
-    justify-content: left;
-    gap: 3rem;
-}
-
-.socialMedia{
-    display:flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-}
-.socialMedia a{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50px;
-    background-color:rgba(57 , 62 , 70 , 0.5);
-    backdrop-filter: blur(4px);
-    padding: 1rem;
-}
-.socialMedia img{
-    width: 24px;
-    height:24px;
-}
-footer{
-    color:#eeeeee;
-    padding: 2rem;
-    text-align: center;
-}
-:root {
-  --dark-blue: #0758ee;
-  --accent: #0077ff;
-  --card: #0976eb;
-}
-
-/* Popup background */
-.popup {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-/* Popup box */
-.popup-content {
-  background: var(--card);
-  padding: 30px;
-  border-radius: 14px;
-  width: 750px;      /* Bigger width */
-  max-width: 90%;    /* Responsive on mobile */
-  color: white;
-  box-shadow: 0 5px 25px rgba(0,0,0,0.45);
-  animation: fadeIn 0.25s ease-in-out;
-}
-
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.9); }
-  to   { opacity: 1; transform: scale(1); }
-}
-
-/* Close button */
-.close {
-  float: right;
-  font-size: 28px;
-  cursor: pointer;
-}
-
-/* Image */
-.popup-img {
-  width: 100%;
-  border-radius: 8px;
-  margin-bottom: 15px;
-}
-
-/* Button to open popup */
-.btn-open {
-  background: var(--accent);
-  color: white;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.btn-open:hover {
-  background: var(--dark-blue);
-}
-.back-btn {
-  background: transparent;
-  color: #fff;
-  border: 2px solid #fff;
-  padding: 6px 14px;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  margin-top: 10px;
-  transition: 0.25s ease;
-}
-
-.back-btn:hover {
-  background: #ffffff22;
-}
-
-
-/* SEARCH BAR (TOP RIGHT CORNER) */
-.search-wrapper {
-  position: absolute;
-  top: 25px;
-  right: 25px;
-  z-index: 10;
-}
-
-.search-input {
-  width: 220px;
-  padding: 10px 14px;
-  border: none;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(5px);
-  color: white;
-  font-size: 15px;
-  outline: none;
-  transition: 0.25s ease;
-}
-
-.search-input::placeholder {
-  color: #eeeeee;
-}
-
-.search-input:focus {
-  background: rgba(255, 255, 255, 0.28);
-}
-
-    /* ===============================
-   RESPONSIVE FIXES
-   =============================== */
-
-/* Tablets */
-@media (max-width: 1024px) {
-  header {
-    text-align: center;
-    padding: 20px 16px;
-  }
-
-  .logo {
-    font-size: 30px;
-  }
-
-  .search-wrapper {
-    position: static;
-    margin-top: 15px;
-    display: flex;
-    justify-content: center;
-  }
-
-  .products {
-    padding: 0 16px;
-  }
-
-  .product-grid {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  }
-}
-
-/* Mobile phones */
-@media (max-width: 600px) {
-
-  /* Header */
-  header {
-    text-align: center;
-  }
-
-  .logo {
-    font-size: 26px;
-  }
-
-  .tag {
-    font-size: 14px;
-  }
-
-  .back-btn {
-    margin: 10px auto;
-    display: block;
-  }
-
-  /* Search bar */
-  .search-input {
-    width: 100%;
-    max-width: 300px;
-  }
-
-  /* Cards grid */
-  .product-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .card {
-    align-items: center;
-    text-align: center;
-  }
-
-  .card h3 {
-    font-size: 16px;
-  }
-
-  .desc {
-    font-size: 14px;
-  }
-
-  .price {
-    font-size: 15px;
-  }
-
-  .image-cube {
-    width: 100px;
-    height: 100px;
-    margin: 12px auto;
-  }
-
-  /* Popup responsive */
-  .popup-content {
-    width: 95%;
-    padding: 20px;
-  }
-
-  .popup-content > div {
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .popup-img {
-    max-width: 220px;
-    margin: 0 auto;
-  }
-
-  .btn-open {
-    width: 100%;
-    font-size: 15px;
-  }
-}
-
-</style>
-
 </html>
-
