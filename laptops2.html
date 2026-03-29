@@ -443,6 +443,19 @@
     <h2>All Laptops</h2>
 
     <div class="product-grid" id="laptopGrid">
+      <section class="wt-products-section">
+  <div class="wt-section-header">
+    <div class="wt-section-title">Our Laptops</div>
+    <div class="wt-section-count" id="wt-count"></div>
+  </div>
+  <div class="wt-grid" id="wt-grid">
+    <div class="wt-loading">
+      <div class="wt-spinner"></div>
+      Loading products…
+    </div>
+  </div>
+</section>
+
 
       <!-- CARD 2 -->
       <article class="card">
@@ -1461,5 +1474,78 @@ Is this item available?`;
       searchInput.addEventListener("input", filterCards);
     });
   </script>
+  
+<!-- 3. Paste this script at the bottom of your page, before </body> -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+  import { getFirestore, collection, query, orderBy, onSnapshot }
+    from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCe5PuaGUACBLxvOliU49EZe_UCZcdikw0",
+    authDomain: "whattech-74758.firebaseapp.com",
+    projectId: "whattech-74758",
+    storageBucket: "whattech-74758.firebasestorage.app",
+    messagingSenderId: "1078561227403",
+    appId: "1:1078561227403:web:0d6898ace013521dfd0a8e"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const statusColors = {
+    'In Stock':     { bg: '#00c896', text: '#000' },
+    'Low Stock':    { bg: '#ffb700', text: '#000' },
+    'Out of Stock': { bg: '#ff4d6d', text: '#fff' },
+    'Pre-Order':    { bg: '#7b5ea7', text: '#fff' },
+  };
+
+  const q = query(collection(db, 'laptops'), orderBy('createdAt', 'asc'));
+
+  onSnapshot(q, (snapshot) => {
+    const grid = document.getElementById('wt-grid');
+    const countEl = document.getElementById('wt-count');
+    const products = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+
+    countEl.textContent = products.length + ' product' + (products.length !== 1 ? 's' : '');
+
+    if (products.length === 0) {
+      grid.innerHTML = `<div class="wt-empty">🛒 No products available right now. Check back soon!</div>`;
+      return;
+    }
+
+    grid.innerHTML = '';
+    products.forEach((p, i) => {
+      const sc = statusColors[p.status] || { bg: '#7b5ea7', text: '#fff' };
+      const card = document.createElement('div');
+      card.className = 'wt-card';
+      card.style.animationDelay = (i * 0.06) + 's';
+
+      card.innerHTML = `
+        <div class="wt-badge" style="background:${sc.bg};color:${sc.text}">${p.status || 'Available'}</div>
+        ${p.img
+          ? `<img class="wt-card-img" src="${p.img}" alt="${p.name}" loading="lazy">`
+          : `<div class="wt-card-img-placeholder">💻</div>`}
+        <div class="wt-card-body">
+          <div class="wt-brand">${p.brand || ''}</div>
+          <div class="wt-name">${p.name || ''}</div>
+          <div class="wt-specs">
+            ${p.ram     ? `<span class="wt-spec">💾 ${p.ram}</span>` : ''}
+            ${p.cpu     ? `<span class="wt-spec">🖥 ${p.cpu}</span>` : ''}
+            ${p.storage ? `<span class="wt-spec">💿 ${p.storage}</span>` : ''}
+            ${p.gpu     ? `<span class="wt-spec">🎮 ${p.gpu}</span>` : ''}
+            ${p.battery ? `<span class="wt-spec">🔋 ${p.battery}</span>` : ''}
+          </div>
+          <div class="wt-card-footer">
+            <div class="wt-price">$${Number(p.price || 0).toLocaleString()}</div>
+            <a class="wt-btn" href="#contact">Order Now</a>
+          </div>
+        </div>`;
+
+      grid.appendChild(card);
+    });
+  });
+</script>
+
 </body>
 </html>
