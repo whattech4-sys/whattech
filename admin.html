@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WhatTech — Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --card: #16161f;
+    --border: #2a2a3a;
+    --accent: #00e5ff;
+    --accent2: #ff4d6d;
+    --accent3: #7b5ea7;
+    --text: #e8e8f0;
+    --muted: #6b6b80;
+    --success: #00c896;
+    --warning: #ffb700;
+    --font-head: 'Syne', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-head);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── LOGIN SCREEN ── */
+  #login-screen {
+    position: fixed; inset: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,229,255,.08) 0%, transparent 70%),
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(42,42,58,.4) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(42,42,58,.4) 40px);
+  }
+
+  .login-box {
+    width: 420px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 48px 40px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 80px rgba(0,229,255,.06), 0 0 0 1px rgba(0,229,255,.04);
+  }
+
+  .login-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+
+  .login-logo { font-size: 28px; font-weight: 800; letter-spacing: -1px; margin-bottom: 6px; }
+  .login-logo span { color: var(--accent); }
+
+  .login-sub {
+    font-family: var(--font-mono); font-size: 11px; color: var(--muted);
+    letter-spacing: 2px; text-transform: uppercase; margin-bottom: 36px;
+  }
+
+  .field { margin-bottom: 20px; }
+  .field label {
+    display: block; font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px;
+  }
+  .field input {
+    width: 100%; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 16px; color: var(--text);
+    font-family: var(--font-mono); font-size: 14px; outline: none;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .field input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,229,255,.1); }
+
+  .login-btn {
+    width: 100%; background: var(--accent); color: #000; border: none;
+    border-radius: 8px; padding: 14px; font-family: var(--font-head);
+    font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 8px;
+    transition: opacity .2s, transform .1s; letter-spacing: .5px;
+  }
+  .login-btn:hover { opacity: .88; }
+  .login-btn:active { transform: scale(.98); }
+
+  .login-err {
+    margin-top: 14px; font-family: var(--font-mono); font-size: 12px;
+    color: var(--accent2); text-align: center; display: none;
+  }
+
+  /* ── ADMIN LAYOUT ── */
+  #admin { display: none; min-height: 100vh; }
+
+  .topbar {
+    height: 60px; background: var(--surface); border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; padding: 0 32px; gap: 20px;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .topbar-logo { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; flex: 1; }
+  .topbar-logo span { color: var(--accent); }
+
+  .topbar-badge {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px;
+    color: var(--muted); background: var(--card); border: 1px solid var(--border);
+    border-radius: 20px; padding: 4px 12px; text-transform: uppercase;
+  }
+
+  /* Firebase status dot */
+  .fb-status {
+    display: flex; align-items: center; gap: 6px;
+    font-family: var(--font-mono); font-size: 10px; color: var(--muted);
+  }
+  .fb-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--muted); transition: background .3s;
+  }
+  .fb-dot.connected { background: var(--success); box-shadow: 0 0 6px var(--success); }
+  .fb-dot.error { background: var(--accent2); }
+
+  .role-badge {
+    font-family: var(--font-mono); font-size: 9px; letter-spacing: 1.5px;
+    text-transform: uppercase; border-radius: 20px; padding: 3px 10px; font-weight: 700;
+  }
+  .role-badge.admin { background: rgba(0,229,255,.12); color: var(--accent); border: 1px solid rgba(0,229,255,.3); }
+  .role-badge.limited { background: rgba(255,183,0,.1); color: var(--warning); border: 1px solid rgba(255,183,0,.3); }
+
+  .access-banner {
+    background: rgba(255,183,0,.07); border: 1px solid rgba(255,183,0,.2);
+    border-radius: 10px; padding: 12px 18px; margin-bottom: 28px;
+    display: flex; align-items: center; gap: 12px;
+    font-family: var(--font-mono); font-size: 12px; color: var(--warning);
+  }
+
+  .topbar-user {
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--font-mono); font-size: 12px; color: var(--muted);
+  }
+  .avatar {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, var(--accent3), var(--accent));
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 13px; color: #fff;
+  }
+  .avatar.karim { background: linear-gradient(135deg, var(--warning), #ff8c00); }
+
+  .logout-btn {
+    background: none; border: 1px solid var(--border); color: var(--muted);
+    border-radius: 6px; padding: 6px 14px; font-family: var(--font-mono);
+    font-size: 11px; cursor: pointer; transition: border-color .2s, color .2s;
+  }
+  .logout-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+
+  .main { max-width: 1200px; margin: 0 auto; padding: 40px 32px; }
+
+  .page-header {
+    margin-bottom: 36px; display: flex; align-items: flex-end; justify-content: space-between;
+  }
+  .page-title { font-size: 32px; font-weight: 800; letter-spacing: -1px; }
+  .page-sub { font-family: var(--font-mono); font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  .add-btn {
+    background: var(--accent); color: #000; border: none; border-radius: 8px;
+    padding: 12px 22px; font-family: var(--font-head); font-weight: 700; font-size: 14px;
+    cursor: pointer; display: flex; align-items: center; gap: 8px; transition: opacity .2s;
+  }
+  .add-btn:hover { opacity: .85; }
+
+  /* ── STATS ── */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 36px; }
+  .stat-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 20px 22px; position: relative; overflow: hidden;
+  }
+  .stat-card::after {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: var(--accent-col, var(--accent));
+  }
+  .stat-label { font-family: var(--font-mono); font-size: 10px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; }
+  .stat-value { font-size: 28px; font-weight: 800; letter-spacing: -1px; }
+  .stat-change { font-family: var(--font-mono); font-size: 11px; color: var(--success); margin-top: 4px; }
+
+  /* ── PRODUCT GRID ── */
+  .section-title {
+    font-size: 18px; font-weight: 700; margin-bottom: 20px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .product-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px; min-height: 120px;
+  }
+
+  /* Loading state */
+  .loading-grid {
+    grid-column: 1/-1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; padding: 60px;
+    color: var(--muted); font-family: var(--font-mono); font-size: 13px; gap: 16px;
+  }
+  .spinner {
+    width: 36px; height: 36px; border: 2px solid var(--border);
+    border-top-color: var(--accent); border-radius: 50%;
+    animation: spin .7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── LAPTOP CARD ── */
+  .laptop-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+    overflow: hidden; cursor: grab;
+    transition: transform .2s, box-shadow .2s, border-color .2s;
+    position: relative; animation: fadeIn .3s ease;
+  }
+  @keyframes fadeIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: none; } }
+  .laptop-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,.4); border-color: rgba(0,229,255,.2); }
+  .laptop-card.dragging { opacity: .4; cursor: grabbing; transform: scale(.97); }
+  .laptop-card.drag-over { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(0,229,255,.3); }
+
+  .card-img {
+    width: 100%; height: 180px; background: var(--surface);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .card-img img { width: 100%; height: 100%; object-fit: cover; }
+  .card-img-placeholder {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    color: var(--muted); font-family: var(--font-mono); font-size: 11px; pointer-events: none;
+  }
+  .card-img-placeholder svg { opacity: .4; }
+  .card-img.has-image .card-img-placeholder { display: none; }
+  .drop-indicator {
+    position: absolute; inset: 0; background: rgba(0,229,255,.08);
+    border: 2px dashed var(--accent); display: none;
+    align-items: center; justify-content: center;
+    font-family: var(--font-mono); font-size: 12px; color: var(--accent); z-index: 5;
+  }
+  .card-img:hover .drop-indicator { display: flex; }
+
+  .card-body { padding: 16px 18px 18px; }
+  .card-brand { font-family: var(--font-mono); font-size: 10px; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; }
+  .card-name { font-size: 16px; font-weight: 700; margin-bottom: 8px; line-height: 1.3; }
+  .card-specs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .spec-tag {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 4px;
+    padding: 3px 8px; font-family: var(--font-mono); font-size: 10px; color: var(--muted);
+  }
+  .card-footer { display: flex; align-items: center; justify-content: space-between; }
+  .card-price { font-size: 20px; font-weight: 800; color: var(--accent); }
+  .card-actions { display: flex; gap: 8px; }
+  .icon-btn {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 6px;
+    padding: 6px 8px; cursor: pointer; color: var(--muted);
+    transition: border-color .2s, color .2s; font-size: 14px;
+  }
+  .icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .icon-btn.del:hover { border-color: var(--accent2); color: var(--accent2); }
+  .card-badge {
+    position: absolute; top: 12px; right: 12px; background: var(--accent);
+    color: #000; font-family: var(--font-mono); font-size: 9px; letter-spacing: 1px;
+    text-transform: uppercase; border-radius: 4px; padding: 3px 8px; font-weight: 700;
+  }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 500;
+    background: rgba(0,0,0,.7); backdrop-filter: blur(4px);
+    display: none; align-items: center; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+    width: 560px; max-width: 95vw; max-height: 90vh; overflow-y: auto;
+    padding: 36px; position: relative; box-shadow: 0 40px 80px rgba(0,0,0,.5);
+  }
+  .modal-title { font-size: 22px; font-weight: 800; margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+  .modal-close {
+    position: absolute; top: 20px; right: 20px; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px;
+    cursor: pointer; color: var(--muted); font-size: 16px; transition: border-color .2s; line-height: 1;
+  }
+  .modal-close:hover { border-color: var(--accent2); color: var(--accent2); }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-field { margin-bottom: 16px; }
+  .form-field label {
+    display: block; font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 1.5px; color: var(--muted); text-transform: uppercase; margin-bottom: 6px;
+  }
+  .form-field input, .form-field select, .form-field textarea {
+    width: 100%; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 14px; color: var(--text);
+    font-family: var(--font-mono); font-size: 13px; outline: none; transition: border-color .2s;
+  }
+  .form-field input:focus, .form-field select:focus, .form-field textarea:focus { border-color: var(--accent); }
+  .form-field input:disabled, .form-field select:disabled, .form-field textarea:disabled { opacity: 0.4; cursor: not-allowed; }
+  .form-field textarea { resize: vertical; min-height: 80px; }
+  .form-field select option { background: var(--card); }
+
+  .img-drop-zone {
+    border: 2px dashed var(--border); border-radius: 10px; padding: 30px;
+    text-align: center; cursor: pointer; transition: border-color .2s, background .2s;
+    position: relative; margin-bottom: 16px; background: var(--surface);
+  }
+  .img-drop-zone:hover, .img-drop-zone.dragover { border-color: var(--accent); background: rgba(0,229,255,.04); }
+  .img-drop-zone.locked { cursor: not-allowed; opacity: 0.45; pointer-events: none; }
+  .img-drop-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+  .img-drop-zone .dz-icon { font-size: 32px; margin-bottom: 8px; }
+  .img-drop-zone .dz-text { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+  .img-drop-zone .dz-preview { max-height: 120px; border-radius: 6px; display: none; margin: 0 auto; }
+
+  .save-btn {
+    width: 100%; background: var(--accent); color: #000; border: none;
+    border-radius: 8px; padding: 14px; font-family: var(--font-head); font-weight: 700;
+    font-size: 15px; cursor: pointer; margin-top: 8px; transition: opacity .2s;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+  }
+  .save-btn:hover { opacity: .85; }
+  .save-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+  /* ── GLOBAL DROP ZONE ── */
+  .global-drop-zone {
+    border: 2px dashed var(--border); border-radius: 14px; padding: 40px;
+    text-align: center; color: var(--muted); font-family: var(--font-mono); font-size: 13px;
+    margin-bottom: 28px; transition: border-color .2s, background .2s; cursor: default;
+  }
+  .global-drop-zone.active { border-color: var(--accent); background: rgba(0,229,255,.04); color: var(--accent); }
+  .global-drop-zone.hidden { display: none; }
+  .global-drop-zone .dz-big { font-size: 36px; margin-bottom: 10px; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; bottom: 30px; right: 30px; z-index: 9999;
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 14px 20px; font-family: var(--font-mono); font-size: 13px;
+    display: flex; align-items: center; gap: 10px;
+    box-shadow: 0 10px 40px rgba(0,0,0,.4);
+    transform: translateY(20px); opacity: 0; transition: all .3s ease; pointer-events: none;
+  }
+  .toast.show { transform: none; opacity: 1; }
+  .toast.success { border-color: var(--success); }
+  .toast.error { border-color: var(--accent2); }
+  .toast.info { border-color: var(--accent); }
+
+  @media (max-width: 768px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .form-row { grid-template-columns: 1fr; }
+    .main { padding: 24px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">What<span>Tech</span></div>
+    <div class="login-sub">Admin Portal</div>
+    <div class="field">
+      <label>Username</label>
+      <input type="text" id="username" placeholder="Enter username" autocomplete="off">
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="password" placeholder="Enter password">
+    </div>
+    <button class="login-btn" onclick="doLogin()">Sign In →</button>
+    <div class="login-err" id="login-err">⚠ Invalid credentials. Please try again.</div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="admin">
+  <div class="topbar">
+    <div class="topbar-logo">What<span>Tech</span></div>
+    <div class="topbar-badge">Admin Panel</div>
+    <div class="fb-status">
+      <div class="fb-dot" id="fb-dot"></div>
+      <span id="fb-label">Connecting…</span>
+    </div>
+    <div style="flex:1"></div>
+    <div class="topbar-user">
+      <div class="avatar" id="topbar-avatar">M</div>
+      <span id="topbar-username">mohammad</span>
+      <span class="role-badge admin" id="topbar-role">Admin</span>
+    </div>
+    <button class="logout-btn" onclick="doLogout()">Logout</button>
+  </div>
+
+  <div class="main">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Laptop Products</div>
+        <div class="page-sub" id="page-sub">// changes sync live to whattech.tech</div>
+      </div>
+      <button class="add-btn" id="add-btn" onclick="openModal()">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1v14M1 8h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        Add Laptop
+      </button>
+    </div>
+
+    <div class="access-banner" id="access-banner" style="display:none">
+      <span>⚠️</span>
+      <span>You have <strong>limited access</strong>. You can only edit the <strong>Price</strong> and <strong>Status</strong> of existing products.</span>
+    </div>
+
+    <div class="stats">
+      <div class="stat-card" style="--accent-col:var(--accent)">
+        <div class="stat-label">Total Products</div>
+        <div class="stat-value" id="stat-total">—</div>
+        <div class="stat-change">↑ Live from Firebase</div>
+      </div>
+      <div class="stat-card" style="--accent-col:var(--success)">
+        <div class="stat-label">In Stock</div>
+        <div class="stat-value" id="stat-instock">—</div>
+        <div class="stat-change" style="color:var(--success)">↑ Available</div>
+      </div>
+      <div class="stat-card" style="--accent-col:var(--warning)">
+        <div class="stat-label">Avg Price</div>
+        <div class="stat-value" id="stat-price">—</div>
+        <div class="stat-change" style="color:var(--warning)">USD</div>
+      </div>
+      <div class="stat-card" style="--accent-col:var(--accent3)">
+        <div class="stat-label">Brands</div>
+        <div class="stat-value" id="stat-brands">—</div>
+        <div class="stat-change" style="color:var(--accent3)">Unique brands</div>
+      </div>
+    </div>
+
+    <div class="global-drop-zone" id="global-dz"
+         ondragover="globalDragOver(event)" ondragleave="globalDragLeave()" ondrop="globalDrop(event)">
+      <div class="dz-big">📦</div>
+      <div>Drop an image here to create a new laptop entry automatically</div>
+    </div>
+
+    <div class="section-title">All Laptops</div>
+    <div class="product-grid" id="product-grid">
+      <div class="loading-grid">
+        <div class="spinner"></div>
+        <span>Connecting to Firebase…</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title"><span id="modal-title-text">➕ Add New Laptop</span></div>
+
+    <div class="img-drop-zone" id="modal-dz"
+         ondragover="e=>{e.preventDefault();document.getElementById('modal-dz').classList.add('dragover')}"
+         ondragleave="e=>{document.getElementById('modal-dz').classList.remove('dragover')}"
+         ondrop="modalImgDrop(event)">
+      <input type="file" id="img-file" accept="image/*" onchange="previewImg(event)">
+      <img class="dz-preview" id="img-preview">
+      <div class="dz-icon" id="dz-icon">🖼️</div>
+      <div class="dz-text" id="dz-text">Drag & drop image here or click to upload</div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-field">
+        <label>Brand</label>
+        <select id="f-brand">
+          <option>Apple</option><option>Dell</option><option>HP</option>
+          <option>Lenovo</option><option>ASUS</option><option>Acer</option>
+          <option>MSI</option><option>Razer</option><option>Samsung</option><option>Other</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Model Name</label>
+        <input type="text" id="f-name" placeholder="e.g. MacBook Pro 16">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field">
+        <label>Price (USD)</label>
+        <input type="number" id="f-price" placeholder="1299">
+      </div>
+      <div class="form-field">
+        <label>Status</label>
+        <select id="f-status">
+          <option>In Stock</option><option>Low Stock</option>
+          <option>Out of Stock</option><option>Pre-Order</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field">
+        <label>Processor</label>
+        <input type="text" id="f-cpu" placeholder="e.g. M3 Pro / i9-13900H">
+      </div>
+      <div class="form-field">
+        <label>RAM</label>
+        <input type="text" id="f-ram" placeholder="e.g. 32GB">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field">
+        <label>Storage</label>
+        <input type="text" id="f-storage" placeholder="e.g. 1TB SSD">
+      </div>
+      <div class="form-field">
+        <label>Display</label>
+        <input type="text" id="f-display" placeholder='e.g. 16" Retina'>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field">
+        <label>GPU</label>
+        <input type="text" id="f-gpu" placeholder="e.g. RTX 4080 / Integrated">
+      </div>
+      <div class="form-field">
+        <label>Battery Life</label>
+        <input type="text" id="f-battery" placeholder="e.g. 22 hrs">
+      </div>
+    </div>
+    <div class="form-field">
+      <label>Description</label>
+      <textarea id="f-desc" placeholder="Short product description..."></textarea>
+    </div>
+
+    <button class="save-btn" id="save-btn" onclick="saveProduct()">Save Laptop →</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+  import {
+    getFirestore, collection, addDoc, updateDoc, deleteDoc,
+    doc, onSnapshot, query, orderBy, serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+
+  // ── FIREBASE CONFIG ──
+  const firebaseConfig = {
+    apiKey: "AIzaSyCe5PuaGUACBLxvOliU49EZe_UCZcdikw0",
+    authDomain: "whattech-74758.firebaseapp.com",
+    projectId: "whattech-74758",
+    storageBucket: "whattech-74758.firebasestorage.app",
+    messagingSenderId: "1078561227403",
+    appId: "1:1078561227403:web:0d6898ace013521dfd0a8e"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const laptopsCol = collection(db, "laptops");
+
+  // ── AUTH ──
+  const USERS = [
+    { user: 'mohammad', pass: 'Mo@12344',  role: 'admin',   display: 'Mohammad', initial: 'M', avatarClass: '' },
+    { user: 'jad',      pass: 'Jad@12344', role: 'admin',   display: 'Jad',      initial: 'J', avatarClass: '' },
+    { user: 'karim',    pass: 'Kar@5678',  role: 'limited', display: 'Karim',    initial: 'K', avatarClass: 'karim' },
+  ];
+
+  let currentUser = null;
+  let products = [];
+  let editingId = null;
+  let modalImg = '';
+  let dragSrcId = null;
+  let unsubscribe = null;
+
+  const isAdmin = () => currentUser?.role === 'admin';
+
+  // ── LOGIN ──
+  window.doLogin = function() {
+    const u = document.getElementById('username').value.trim().toLowerCase();
+    const p = document.getElementById('password').value;
+    const found = USERS.find(x => x.user === u && x.pass === p);
+    if (found) {
+      currentUser = found;
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('admin').style.display = 'block';
+      applyRoleUI();
+      startListening();
+    } else {
+      document.getElementById('login-err').style.display = 'block';
+    }
+  };
+
+  window.doLogout = function() {
+    if (unsubscribe) unsubscribe();
+    currentUser = null;
+    products = [];
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('admin').style.display = 'none';
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+    document.getElementById('login-err').style.display = 'none';
+    setFbStatus('idle');
+  };
+
+  document.getElementById('password').addEventListener('keydown', e => {
+    if (e.key === 'Enter') window.doLogin();
+  });
+
+  function applyRoleUI() {
+    document.getElementById('topbar-avatar').textContent = currentUser.initial;
+    document.getElementById('topbar-avatar').className = 'avatar ' + currentUser.avatarClass;
+    document.getElementById('topbar-username').textContent = currentUser.display;
+    const roleBadge = document.getElementById('topbar-role');
+    roleBadge.textContent = isAdmin() ? 'Admin' : 'Limited';
+    roleBadge.className = 'role-badge ' + (isAdmin() ? 'admin' : 'limited');
+    document.getElementById('add-btn').style.display = isAdmin() ? 'flex' : 'none';
+    document.getElementById('global-dz').classList.toggle('hidden', !isAdmin());
+    document.getElementById('access-banner').style.display = isAdmin() ? 'none' : 'flex';
+    document.getElementById('page-sub').textContent = isAdmin()
+      ? '// changes sync live to whattech.tech'
+      : '// limited access — price & status edits only';
+  }
+
+  // ── FIREBASE STATUS ──
+  function setFbStatus(state) {
+    const dot = document.getElementById('fb-dot');
+    const label = document.getElementById('fb-label');
+    if (state === 'connected') { dot.className = 'fb-dot connected'; label.textContent = 'Firebase live'; }
+    else if (state === 'error') { dot.className = 'fb-dot error'; label.textContent = 'Connection error'; }
+    else { dot.className = 'fb-dot'; label.textContent = 'Connecting…'; }
+  }
+
+  // ── REAL-TIME LISTENER ──
+  function startListening() {
+    setFbStatus('idle');
+    const q = query(laptopsCol, orderBy('createdAt', 'asc'));
+    unsubscribe = onSnapshot(q,
+      (snapshot) => {
+        setFbStatus('connected');
+        products = snapshot.docs.map(d => ({ firestoreId: d.id, ...d.data() }));
+        renderAll();
+      },
+      (err) => {
+        console.error(err);
+        setFbStatus('error');
+        showToast('error', '❌ Firebase error: ' + err.message);
+      }
+    );
+  }
+
+  // ── RENDER ──
+  function renderAll() { renderGrid(); updateStats(); }
+
+  function renderGrid() {
+    const grid = document.getElementById('product-grid');
+    grid.innerHTML = '';
+    if (products.length === 0) {
+      grid.innerHTML = `<div class="loading-grid" style="color:var(--muted)">
+        <span style="font-size:36px">📭</span>
+        <span>No products yet. Click "Add Laptop" to get started.</span>
+      </div>`;
+      return;
+    }
+    products.forEach(p => grid.appendChild(makeCard(p)));
+  }
+
+  function makeCard(p) {
+    const card = document.createElement('div');
+    card.className = 'laptop-card';
+    card.draggable = isAdmin();
+    card.dataset.id = p.firestoreId;
+
+    const statusColor = p.status === 'In Stock' ? 'var(--success)'
+      : p.status === 'Low Stock' ? 'var(--warning)'
+      : p.status === 'Out of Stock' ? 'var(--accent2)' : 'var(--accent3)';
+
+    const imgHtml = isAdmin()
+      ? `<div class="card-img ${p.img ? 'has-image' : ''}" id="ci-${p.firestoreId}"
+             ondragover="event.preventDefault();event.stopPropagation()"
+             ondrop="window.cardImgDrop(event,'${p.firestoreId}')">
+           <div class="drop-indicator">📷 Drop image here</div>
+           ${p.img ? `<img src="${p.img}" alt="${p.name}">` : cardPlaceholder()}
+         </div>`
+      : `<div class="card-img ${p.img ? 'has-image' : ''}" id="ci-${p.firestoreId}">
+           ${p.img ? `<img src="${p.img}" alt="${p.name}">` : cardPlaceholder()}
+         </div>`;
+
+    const actions = isAdmin()
+      ? `<button class="icon-btn" onclick="window.editProduct('${p.firestoreId}')" title="Edit">✏️</button>
+         <button class="icon-btn del" onclick="window.deleteProduct('${p.firestoreId}')" title="Delete">🗑</button>`
+      : `<button class="icon-btn" onclick="window.editProduct('${p.firestoreId}')" title="Edit Price & Status" style="border-color:rgba(255,183,0,.4);color:var(--warning)">✏️</button>`;
+
+    card.innerHTML = `
+      <div class="card-badge" style="background:${statusColor};color:${p.status==='In Stock'?'#000':'#fff'}">${p.status}</div>
+      ${imgHtml}
+      <div class="card-body">
+        <div class="card-brand">${p.brand || ''}</div>
+        <div class="card-name">${p.name || ''}</div>
+        <div class="card-specs">
+          ${p.ram ? `<span class="spec-tag">💾 ${p.ram}</span>` : ''}
+          ${p.cpu ? `<span class="spec-tag">🖥 ${p.cpu}</span>` : ''}
+          ${p.storage ? `<span class="spec-tag">💿 ${p.storage}</span>` : ''}
+          ${p.gpu ? `<span class="spec-tag">🎮 ${p.gpu}</span>` : ''}
+          ${p.battery ? `<span class="spec-tag">🔋 ${p.battery}</span>` : ''}
+        </div>
+        <div class="card-footer">
+          <div class="card-price">$${Number(p.price||0).toLocaleString()}</div>
+          <div class="card-actions">${actions}</div>
+        </div>
+      </div>`;
+
+    if (isAdmin()) {
+      card.addEventListener('dragstart', e => {
+        dragSrcId = p.firestoreId;
+        setTimeout(() => card.classList.add('dragging'), 0);
+        e.dataTransfer.effectAllowed = 'move';
+      });
+      card.addEventListener('dragend', () => {
+        card.classList.remove('dragging');
+        document.querySelectorAll('.laptop-card').forEach(c => c.classList.remove('drag-over'));
+      });
+      card.addEventListener('dragover', e => {
+        e.preventDefault(); e.dataTransfer.dropEffect = 'move';
+        if (dragSrcId && dragSrcId !== p.firestoreId) card.classList.add('drag-over');
+      });
+      card.addEventListener('dragleave', () => card.classList.remove('drag-over'));
+      card.addEventListener('drop', e => {
+        e.stopPropagation(); e.preventDefault();
+        card.classList.remove('drag-over');
+        if (e.dataTransfer.files?.length > 0) return;
+        if (dragSrcId && dragSrcId !== p.firestoreId) {
+          const fromIdx = products.findIndex(x => x.firestoreId === dragSrcId);
+          const toIdx = products.findIndex(x => x.firestoreId === p.firestoreId);
+          const [moved] = products.splice(fromIdx, 1);
+          products.splice(toIdx, 0, moved);
+          dragSrcId = null;
+          renderGrid();
+          showToast('success', '✅ Cards reordered!');
+        }
+      });
+    }
+    return card;
+  }
+
+  function cardPlaceholder() {
+    return `<div class="card-img-placeholder">
+      <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+        <rect x="4" y="8" width="32" height="22" rx="3" stroke="currentColor" stroke-width="1.5"/>
+        <rect x="14" y="30" width="12" height="3" stroke="currentColor" stroke-width="1.5"/>
+        <rect x="10" y="33" width="20" height="2" rx="1" stroke="currentColor" stroke-width="1.5"/>
+        <circle cx="20" cy="19" r="5" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
+      <span>No image</span>
+    </div>`;
+  }
+
+  // ── IMAGE DROP ON CARD ──
+  window.cardImgDrop = function(e, firestoreId) {
+    if (!isAdmin()) return;
+    e.preventDefault(); e.stopPropagation();
+    dragSrcId = null;
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = async ev => {
+        try {
+          await updateDoc(doc(db, 'laptops', firestoreId), { img: ev.target.result });
+          showToast('success', '🖼️ Image updated on your website!');
+        } catch(err) { showToast('error', '❌ ' + err.message); }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // ── GLOBAL DROP ──
+  window.globalDragOver = e => { e.preventDefault(); document.getElementById('global-dz').classList.add('active'); };
+  window.globalDragLeave = () => document.getElementById('global-dz').classList.remove('active');
+  window.globalDrop = e => {
+    e.preventDefault();
+    document.getElementById('global-dz').classList.remove('active');
+    if (!isAdmin()) return;
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = ev => { modalImg = ev.target.result; openModal(); showImgPreview(ev.target.result); };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // ── STATS ──
+  function updateStats() {
+    document.getElementById('stat-total').textContent = products.length;
+    document.getElementById('stat-instock').textContent = products.filter(p => p.status === 'In Stock').length;
+    const avg = products.length ? Math.round(products.reduce((s,p) => s + Number(p.price||0), 0) / products.length) : 0;
+    document.getElementById('stat-price').textContent = '$' + avg.toLocaleString();
+    document.getElementById('stat-brands').textContent = new Set(products.map(p => p.brand)).size;
+  }
+
+  // ── MODAL ──
+  window.openModal = function(firestoreId = null) {
+    if (!isAdmin() && !firestoreId) { showToast('error', '🔒 No permission to add products.'); return; }
+    editingId = firestoreId;
+    const limited = !isAdmin();
+
+    ['f-brand','f-name','f-cpu','f-ram','f-storage','f-display','f-gpu','f-battery','f-desc'].forEach(id => {
+      document.getElementById(id).disabled = limited;
+    });
+    const dz = document.getElementById('modal-dz');
+    dz.classList.toggle('locked', limited);
+    document.getElementById('img-file').disabled = limited;
+
+    if (firestoreId) {
+      const p = products.find(x => x.firestoreId === firestoreId);
+      document.getElementById('modal-title-text').textContent = limited ? '✏️ Edit Price & Status' : '✏️ Edit Laptop';
+      document.getElementById('f-brand').value = p.brand || '';
+      document.getElementById('f-name').value = p.name || '';
+      document.getElementById('f-price').value = p.price || '';
+      document.getElementById('f-status').value = p.status || 'In Stock';
+      document.getElementById('f-cpu').value = p.cpu || '';
+      document.getElementById('f-ram').value = p.ram || '';
+      document.getElementById('f-storage').value = p.storage || '';
+      document.getElementById('f-display').value = p.display || '';
+      document.getElementById('f-gpu').value = p.gpu || '';
+      document.getElementById('f-battery').value = p.battery || '';
+      document.getElementById('f-desc').value = p.desc || '';
+      modalImg = p.img || '';
+      if (p.img) showImgPreview(p.img); else resetImgPreview();
+    } else {
+      document.getElementById('modal-title-text').textContent = '➕ Add New Laptop';
+      ['f-brand','f-name','f-price','f-status','f-cpu','f-ram','f-storage','f-display','f-gpu','f-battery','f-desc'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el.tagName === 'SELECT') el.selectedIndex = 0; else el.value = '';
+      });
+      if (!modalImg) resetImgPreview(); else showImgPreview(modalImg);
+    }
+    document.getElementById('modal-overlay').classList.add('open');
+  };
+
+  window.closeModal = function() {
+    document.getElementById('modal-overlay').classList.remove('open');
+    modalImg = ''; resetImgPreview(); editingId = null;
+  };
+
+  document.getElementById('modal-overlay').addEventListener('click', e => {
+    if (e.target === document.getElementById('modal-overlay')) window.closeModal();
+  });
+
+  function resetImgPreview() {
+    document.getElementById('img-preview').style.display = 'none';
+    document.getElementById('dz-icon').style.display = 'block';
+    document.getElementById('dz-text').style.display = 'block';
+  }
+
+  function showImgPreview(src) {
+    const prev = document.getElementById('img-preview');
+    prev.src = src; prev.style.display = 'block';
+    document.getElementById('dz-icon').style.display = 'none';
+    document.getElementById('dz-text').style.display = 'none';
+  }
+
+  window.previewImg = function(e) {
+    if (!isAdmin()) return;
+    const file = e.target.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => { modalImg = ev.target.result; showImgPreview(ev.target.result); };
+    reader.readAsDataURL(file);
+  };
+
+  window.modalImgDrop = function(e) {
+    if (!isAdmin()) return;
+    e.preventDefault();
+    document.getElementById('modal-dz').classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = ev => { modalImg = ev.target.result; showImgPreview(ev.target.result); };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // ── SAVE TO FIREBASE ──
+  window.saveProduct = async function() {
+    const btn = document.getElementById('save-btn');
+    const price = document.getElementById('f-price').value;
+
+    if (!isAdmin()) {
+      // Limited: only price & status
+      if (!price) { showToast('error', '⚠ Price is required'); return; }
+      if (!editingId) return;
+      btn.disabled = true; btn.textContent = 'Saving…';
+      try {
+        await updateDoc(doc(db, 'laptops', editingId), {
+          price: Number(price),
+          status: document.getElementById('f-status').value
+        });
+        showToast('success', '✅ Price & Status updated on your website!');
+        window.closeModal();
+      } catch(err) { showToast('error', '❌ ' + err.message); }
+      finally { btn.disabled = false; btn.textContent = 'Save Laptop →'; }
+      return;
+    }
+
+    const name = document.getElementById('f-name').value.trim();
+    if (!name) { showToast('error', '⚠ Product name is required'); return; }
+    if (!price) { showToast('error', '⚠ Price is required'); return; }
+
+    const data = {
+      brand: document.getElementById('f-brand').value,
+      name,
+      price: Number(price),
+      status: document.getElementById('f-status').value,
+      cpu: document.getElementById('f-cpu').value,
+      ram: document.getElementById('f-ram').value,
+      storage: document.getElementById('f-storage').value,
+      display: document.getElementById('f-display').value,
+      gpu: document.getElementById('f-gpu').value,
+      battery: document.getElementById('f-battery').value,
+      desc: document.getElementById('f-desc').value,
+      img: modalImg
+    };
+
+    btn.disabled = true; btn.textContent = 'Saving to Firebase…';
+    try {
+      if (editingId) {
+        await updateDoc(doc(db, 'laptops', editingId), data);
+        showToast('success', '✅ Laptop updated on your website!');
+      } else {
+        await addDoc(laptopsCol, { ...data, createdAt: serverTimestamp() });
+        showToast('success', '✅ Laptop published to your website!');
+      }
+      window.closeModal();
+    } catch(err) { showToast('error', '❌ ' + err.message); }
+    finally { btn.disabled = false; btn.textContent = 'Save Laptop →'; }
+  };
+
+  window.editProduct = id => window.openModal(id);
+
+  window.deleteProduct = async function(firestoreId) {
+    if (!isAdmin()) { showToast('error', '🔒 No permission to delete.'); return; }
+    if (!confirm('Delete this laptop from your website?')) return;
+    try {
+      await deleteDoc(doc(db, 'laptops', firestoreId));
+      showToast('success', '🗑 Deleted from your website.');
+    } catch(err) { showToast('error', '❌ ' + err.message); }
+  };
+
+  // ── TOAST ──
+  let toastTimer;
+  window.showToast = function(type, msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.className = `toast ${type} show`;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
+  };
+  function showToast(type, msg) { window.showToast(type, msg); }
+</script>
+</body>
+</html>
